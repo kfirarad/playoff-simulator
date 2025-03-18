@@ -1,12 +1,34 @@
-// Update this page (the content is just a fallback if you fail to update the page)
+
+import { LeagueProvider, useLeague } from "@/contexts/LeagueContext";
+import StandingsTable from "@/components/StandingsTable";
+import MatchFixtures from "@/components/MatchFixtures";
+import LeagueHeader from "@/components/LeagueHeader";
+
+const LeagueDashboard = () => {
+  const { teams, matches, teamStats, currentGameWeek } = useLeague();
+
+  return (
+    <div className="container mx-auto py-8 px-4 max-w-7xl">
+      <LeagueHeader />
+      
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <StandingsTable teams={teams} standings={teamStats} />
+        <MatchFixtures 
+          teams={teams} 
+          matches={matches} 
+          currentGameWeek={currentGameWeek}
+        />
+      </div>
+    </div>
+  );
+};
 
 const Index = () => {
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <div className="text-center">
-        <h1 className="text-4xl font-bold mb-4">Welcome to Your Blank App</h1>
-        <p className="text-xl text-gray-600">Start building your amazing project here!</p>
-      </div>
+    <div className="min-h-screen bg-background">
+      <LeagueProvider>
+        <LeagueDashboard />
+      </LeagueProvider>
     </div>
   );
 };

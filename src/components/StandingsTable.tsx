@@ -10,7 +10,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { BarChart, Trophy } from "lucide-react";
+import { Trophy } from "lucide-react";
 
 interface StandingsTableProps {
   teams: Team[];
@@ -24,14 +24,9 @@ export default function StandingsTable({ teams, standings }: StandingsTableProps
         <div className="flex items-center justify-between">
           <CardTitle className="font-medium tracking-tight flex items-center gap-2">
             <Trophy className="h-5 w-5 text-primary" />
-            <span>League Standings</span>
+            <span>טבלת הפלייאוף</span>
           </CardTitle>
-          <div className="flex items-center gap-1 px-2 py-1 rounded-full bg-secondary">
-            <BarChart className="h-4 w-4 text-muted-foreground" />
-            <span className="text-xs text-muted-foreground">
-              Top 2 Probability
-            </span>
-          </div>
+
         </div>
       </CardHeader>
       <CardContent>
@@ -39,22 +34,16 @@ export default function StandingsTable({ teams, standings }: StandingsTableProps
           <TableHeader>
             <TableRow>
               <TableHead className="w-12">#</TableHead>
-              <TableHead>Team</TableHead>
-              <TableHead className="text-center w-12">P</TableHead>
-              <TableHead className="text-center w-12">W</TableHead>
-              <TableHead className="text-center w-12">D</TableHead>
-              <TableHead className="text-center w-12">L</TableHead>
-              <TableHead className="text-center w-12">GF</TableHead>
-              <TableHead className="text-center w-12">GA</TableHead>
-              <TableHead className="text-center w-12">GD</TableHead>
-              <TableHead className="text-center w-12">Pts</TableHead>
-              <TableHead className="text-center w-24">Probability</TableHead>
+              <TableHead></TableHead>
+              <TableHead className="text-center w-12">מש׳</TableHead>
+              <TableHead className="text-center w-12">+/-</TableHead>
+              <TableHead className="text-center w-12">נק׳</TableHead>
+              <TableHead className="text-center w-24">סיכוי עליה</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {standings.map((stats) => {
-              const team = teams.find((t) => t.id === stats.teamId);
-              const goalDifference = stats.goalsFor - stats.goalsAgainst;
+              const team = teams.find((t) => t.id === stats.teamId);              
               
               // Determine row styling based on position
               const isTopTwo = stats.position && stats.position <= 2;
@@ -77,17 +66,12 @@ export default function StandingsTable({ teams, standings }: StandingsTableProps
                     {team?.name}
                   </TableCell>
                   <TableCell className="text-center">{stats.played}</TableCell>
-                  <TableCell className="text-center">{stats.won}</TableCell>
-                  <TableCell className="text-center">{stats.drawn}</TableCell>
-                  <TableCell className="text-center">{stats.lost}</TableCell>
-                  <TableCell className="text-center">{stats.goalsFor}</TableCell>
-                  <TableCell className="text-center">{stats.goalsAgainst}</TableCell>
                   <TableCell className={cn(
                     "text-center font-medium",
-                    goalDifference > 0 ? "text-green-600" : 
-                    goalDifference < 0 ? "text-red-600" : ""
-                  )}>
-                    {goalDifference > 0 ? `+${goalDifference}` : goalDifference}
+                    stats.goalDifference > 0 ? "text-green-600" : 
+                    stats.goalDifference < 0 ? "text-red-600" : ""
+                  )} style={{direction: 'ltr'}}>
+                    {stats.goalDifference > 0 ? `+${stats.goalDifference}` : stats.goalDifference}
                   </TableCell>
                   <TableCell className="text-center font-bold">
                     {stats.points}

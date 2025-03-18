@@ -20,7 +20,7 @@ export default function MatchFixtures({ teams, matches, currentGameWeek }: Match
   const [selectedWeek, setSelectedWeek] = useState<string>(currentGameWeek.toString());
   
   // Generate array of game weeks (1 to 7)
-  const gameWeeks = Array.from({ length: 7 }, (_, i) => i + 1);
+  const gameWeeks = Array.from({ length: 7 }, (_, i) => i + 1 + 30);
   
   // Filter matches by game week
   const matchesForSelectedWeek = matches.filter(
@@ -38,10 +38,10 @@ export default function MatchFixtures({ teams, matches, currentGameWeek }: Match
         <div className="flex items-center justify-between">
           <CardTitle className="font-medium tracking-tight flex items-center gap-2">
             <CalendarDays className="h-5 w-5 text-primary" />
-            <span>Match Fixtures</span>
+            <span>משחקים ותוצאות</span>
           </CardTitle>
           <div className="text-xs text-muted-foreground bg-secondary px-2 py-1 rounded-full">
-            Game Week {selectedWeek} of 7
+            מחזור {selectedWeek} / 37
           </div>
         </div>
       </CardHeader>
@@ -51,7 +51,7 @@ export default function MatchFixtures({ teams, matches, currentGameWeek }: Match
           onValueChange={handleGameWeekChange}
           className="w-full"
         >
-          <TabsList className="w-full grid grid-cols-7 mb-4">
+          <TabsList className="w-full grid grid-cols-7 mb-4" style={{ direction: "rtl"}}>
             {gameWeeks.map((week) => (
               <TabsTrigger
                 key={week}
@@ -68,7 +68,7 @@ export default function MatchFixtures({ teams, matches, currentGameWeek }: Match
           
           {gameWeeks.map((week) => (
             <TabsContent key={week} value={week.toString()} className="pt-2">
-              <div className="space-y-4">
+              <div className="space-y-4"  style={{ direction: "rtl"}}>
                 {matches
                   .filter((match) => match.gameWeek === week)
                   .map((match) => {
@@ -85,18 +85,7 @@ export default function MatchFixtures({ teams, matches, currentGameWeek }: Match
                     );
                   })}
               </div>
-              
-              {parseInt(selectedWeek) > currentGameWeek && (
-                <div className="mt-6 flex justify-center">
-                  <Button
-                    onClick={() => setCurrentGameWeek(parseInt(selectedWeek))}
-                    variant="secondary"
-                    className="animate-pulse-subtle"
-                  >
-                    Advance to Week {selectedWeek}
-                  </Button>
-                </div>
-              )}
+            
             </TabsContent>
           ))}
         </Tabs>

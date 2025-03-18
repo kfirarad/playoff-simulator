@@ -71,8 +71,7 @@ export function LeagueProvider({ children }: { children: React.ReactNode }) {
   const resetLeague = () => {
     setLeagueData(initialData);
     toast({
-      title: "League Reset",
-      description: "All match results have been cleared.",
+      title: "איפוס הושלם",      
     });
   };
 

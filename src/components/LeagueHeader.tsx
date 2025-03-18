@@ -9,13 +9,11 @@ export default function LeagueHeader() {
   return (
     <div className="flex flex-col gap-4 items-center justify-between mb-8 animate-fade-in">
       <div className="flex items-center gap-3">
-        <Trophy className="h-8 w-8 text-primary" />
-        <h1 className="text-3xl font-semibold tracking-tight">Football League Simulator</h1>
+        <h1 className="text-3xl font-semibold tracking-tight">סימולטור הפלייאוף העליון</h1>
       </div>
       
       <div className="flex justify-between items-center w-full">
         <p className="text-muted-foreground">
-          Current Game Week: <span className="font-medium text-foreground">{currentGameWeek}</span> / 7
         </p>
         
         <Button 
@@ -25,7 +23,7 @@ export default function LeagueHeader() {
           onClick={resetLeague}
         >
           <RefreshCw className="h-4 w-4" />
-          Reset League
+          איפוס
         </Button>
       </div>
     </div>

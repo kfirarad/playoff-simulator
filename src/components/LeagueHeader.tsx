@@ -16,7 +16,7 @@ export default function LeagueHeader() {
         <p className="text-muted-foreground">
         </p>
         
-        <Button 
+        {/* <Button 
           variant="outline" 
           size="sm"
           className="flex gap-2 items-center" 
@@ -24,7 +24,7 @@ export default function LeagueHeader() {
         >
           <RefreshCw className="h-4 w-4" />
           איפוס
-        </Button>
+        </Button> */}
       </div>
     </div>
   );

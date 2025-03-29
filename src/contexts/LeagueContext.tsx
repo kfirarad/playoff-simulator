@@ -35,20 +35,11 @@ export function LeagueProvider({ children }: { children: React.ReactNode }) {
     
     setLeagueData((prevData) => {
       const updatedMatches = prevData.matches.map((match) => {
-        if (match.id === matchId) {
-          const homeTeam = prevData.teams.find(t => t.id === match.homeTeamId);
-          const awayTeam = prevData.teams.find(t => t.id === match.awayTeamId);
-          
-          toast({
-            title: "Match Result Updated",
-            description: `${homeTeam?.name} ${homeGoals} - ${awayGoals} ${awayTeam?.name}`,
-          });
-          
+        if (match.id === matchId) {          
           return {
             ...match,
             homeGoals,
-            awayGoals,
-            played: true,
+            awayGoals,            
           };
         }
         return match;

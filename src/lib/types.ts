@@ -7,6 +7,8 @@ export interface Team {
 }
 
 export interface TeamStats {
+  goalsAgainst: number;
+  goalsFor: number;
   teamId: string;
   played: number;
   goalDifference: number;

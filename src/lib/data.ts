@@ -1,15 +1,15 @@
 import { LeagueData, Match, Team, TeamStats } from "./types";
-
+import { debounce } from "lodash";
 export const initialData: LeagueData = {
   teams: [
-    { id: "t1", name: "הפועל תל-אביב", points: 66, goalDifference: 39 },
-    { id: "t2", name: "הפועל פתח-תקוה", points: 65 , goalDifference: 31},
-    { id: "t3", name: "הפועל כפר-שלם", points: 56, goalDifference: 24},
-    { id: "t4", name: "הפועל רמת גן", points: 55, goalDifference: 30 },
-    { id: "t5", name: "בני יהודה", points: 39 , goalDifference: 5},
-    { id: "t6", name: "הפועל כפר סבא", points: 35, goalDifference: 1 },
-    { id: "t7", name: "מ.ס כפר קאסם", points: 35, goalDifference: 4 },
-    { id: "t8", name: "הפועל עכו", points: 34, goalDifference: -12 },
+    { id: "t1", name: "הפועל תל-אביב", points: 72, goalDifference: 43 },
+    { id: "t2", name: "הפועל פתח-תקוה", points: 71 , goalDifference: 33},
+    { id: "t3", name: "הפועל כפר-שלם", points: 59, goalDifference: 24},
+    { id: "t4", name: "הפועל רמת גן", points: 56, goalDifference: 29 },
+    { id: "t5", name: "בני יהודה", points: 44 , goalDifference: 1},
+    { id: "t6", name: "מכבי הרצליה", points: 42, goalDifference: -14 },
+    { id: "t7", name: "הפועל כפר סבא", points: 40, goalDifference: 0 },
+    { id: "t8", name: "הפועל ראשון לציון", points: 40, goalDifference: -2 },
   ],
 
   matches: [
@@ -61,12 +61,14 @@ export function calculateTeamStats(teams: Team[], matches: Match[]): TeamStats[]
       played: 30,
       goalDifference: initialData.teams.find((t) => t.id === team.id)?.goalDifference || 0,
       points: initialData.teams.find((t) => t.id === team.id)?.points || 0,
+      goalsFor: 0,
+      goalsAgainst: 0,
     };
   });
 
   // Update stats based on played matches
   matches.forEach((match) => {
-    if (!match.played || match.homeGoals === null || match.awayGoals === null) return;
+    if (match.homeGoals === null || match.awayGoals === null) return;
 
     const homeStats = stats[match.homeTeamId];
     const awayStats = stats[match.awayTeamId];
@@ -115,12 +117,13 @@ export function calculateTeamStats(teams: Team[], matches: Match[]): TeamStats[]
   return statsArray;
 }
 
-export function calculateProbabilities(
+
+export const calculateProbabilities = function calculateProbabilities(
   teams: Team[], 
   currentMatches: Match[],
   currentGameWeek: number
 ): TeamStats[] {
-  const simulations = 1000;
+  const simulations = 10000;
   const topPositionCounts: { [key: string]: number } = {};
   
   // Initialize counts
@@ -133,6 +136,13 @@ export function calculateProbabilities(
     // Clone current matches
     const simulatedMatches = JSON.parse(JSON.stringify(currentMatches)) as Match[];
     
+    // mark matches as played if have outcome
+    simulatedMatches.forEach((match) => {
+      if(match.awayGoals !== null && match.homeGoals !== null) {
+        match.played = true;
+      }
+    });
+
     // Randomly simulate remaining matches
     simulatedMatches.forEach((match) => {
       if (!match.played && match.gameWeek >= currentGameWeek) {
@@ -146,7 +156,6 @@ export function calculateProbabilities(
     // Calculate final standings for this simulation
     const simulatedStats = calculateTeamStats(teams, simulatedMatches);
     
-    // Count teams finishing in top 2
     simulatedStats.slice(0, 2).forEach((stats) => {
       topPositionCounts[stats.teamId]++;
     });
@@ -162,4 +171,6 @@ export function calculateProbabilities(
       probability: (topPositionCounts[stats.teamId] / simulations) * 100,
     };
   });
-}
+};
+
+export const decounceCalculateProbabilities = debounce(calculateProbabilities, 1000);

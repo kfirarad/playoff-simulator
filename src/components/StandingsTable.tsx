@@ -87,7 +87,7 @@ export default function StandingsTable({ teams, standings }: StandingsTableProps
                       />
                       <div className="absolute top-0 left-0 w-full h-full flex justify-center items-center">
                         <span className="text-xs font-medium mix-blend-difference text-white">
-                          {stats.probability ? `${Math.round(stats.probability)}%` : '0%'}
+                          {stats.probability ? `${stats.probability.toFixed(2)}%` : '0.00%'}
                         </span>
                       </div>
                     </div>

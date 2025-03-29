@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Match, Team } from "@/lib/types";
 import { useLeague } from "@/contexts/LeagueContext";
 import { cn } from "@/lib/utils";
@@ -22,7 +22,8 @@ export default function MatchResult({
   // Local state for input values
   const [homeGoals, setHomeGoals] = useState<number | null>(match.homeGoals);
   const [awayGoals, setAwayGoals] = useState<number | null>(match.awayGoals);
-  const [isEditing, setIsEditing] = useState<boolean>(!match.played);
+
+  const isPlayed = match.played;
 
   // Determine match result text and styling
   let resultText = "";
@@ -41,43 +42,48 @@ export default function MatchResult({
     }
   }
 
-  // Handle form submission
-  const handleSubmit = () => {
+  const handleScoreChange = (team: "home" | "away", value: string) => {
+      const numValue = parseInt(value);
+    if (value === "" || isNaN(numValue)) {
+      if (team === "home") {
+        setHomeGoals(0);
+      } else {
+        setAwayGoals(0);
+      }
+    } else {
+      const goals = Math.max(0, Math.min(99, numValue)); // Limit between 0-99
+      if (team === "home") {
+        setHomeGoals(goals);
+        if(awayGoals === null) {
+          setAwayGoals(0);
+        }
+      } else {
+        setAwayGoals(goals);
+        if(homeGoals === null) {
+          setHomeGoals(0);
+        }
+      }
+    }
+  };
+
+  useEffect(() => {
     if (homeGoals !== null && awayGoals !== null) {
       updateMatchResult({
         matchId: match.id,
         homeGoals,
         awayGoals,
       });
-      setIsEditing(false);
-    }
-  };
+    }}, [homeGoals, awayGoals]);
 
-  // Handle score input
-  const handleScoreChange = (team: "home" | "away", value: string) => {
-    const numValue = parseInt(value);
-    if (value === "" || isNaN(numValue)) {
-      if (team === "home") {
-        setHomeGoals(null);
-      } else {
-        setAwayGoals(null);
-      }
-    } else {
-      const goals = Math.max(0, Math.min(99, numValue)); // Limit between 0-99
-      if (team === "home") {
-        setHomeGoals(goals);
-      } else {
-        setAwayGoals(goals);
-      }
-    }
-  };
+
+    console.log('played', match.played);
 
   return (
     <div
       className={cn(
         "p-4 rounded-lg border transition-all duration-300 animate-slide-up",
         match.played ? "bg-white shadow-sm" : "bg-secondary/50",
-        isEditing ? "border-primary/20 shadow-sm" : "border-transparent"
+        !isPlayed ? "border-primary/20 shadow-sm" : "border-transparent"
       )}
     >
       <div className="flex items-center justify-between">
@@ -86,10 +92,9 @@ export default function MatchResult({
           <div className="text-right flex justify-end items-center gap-2">
             <span
               className="font-medium"
-              onClick={() => {
-                setHomeGoals(1);
-                setAwayGoals(0);
-                handleSubmit();
+              onClick={() => {              
+                setAwayGoals(awayGoals === null ? 0 : awayGoals);
+                setHomeGoals(homeGoals === null ? awayGoals + 1 : homeGoals);
               }}
             >
               {homeTeam.name}
@@ -97,30 +102,37 @@ export default function MatchResult({
             <span className="bg-secondary text-xs rounded-md px-1.5 py-0.5"></span>
           </div>
 
-          {/* Score Section */}
           <div className="flex justify-center items-center">
-            {isEditing ? (
+            {!isPlayed ? (
               <div className="flex gap-1 items-center">
                 <Input
                   type="number"
                   min={0}
-                  max={99}
+                  max={9}
                   value={homeGoals === null ? "" : homeGoals}
                   onChange={(e) => handleScoreChange("home", e.target.value)}
                   className="w-12 text-center p-1 h-8"
                 />
-                <span className="text-muted-foreground">-</span>
+                <span className="text-muted-foreground"
+                  onClick={() => {
+                    setHomeGoals(1);
+                    setAwayGoals(1);
+                  }}>-</span>
                 <Input
                   type="number"
                   min={0}
-                  max={99}
+                  max={9}
                   value={awayGoals === null ? "" : awayGoals}
                   onChange={(e) => handleScoreChange("away", e.target.value)}
                   className="w-12 text-center p-1 h-8"
                 />
               </div>
             ) : (
-              <div className="text-xl font-semibold flex items-center gap-2">
+              <div className="text-xl font-semibold flex items-center gap-2"
+                onClick={() => {
+                setHomeGoals(homeGoals === null ? 0 : homeGoals);
+                setAwayGoals(awayGoals === null ? homeGoals : awayGoals);
+              }}>
                 <span>{match.homeGoals ?? "-"}</span>
                 <span className="text-muted-foreground text-sm">:</span>
                 <span>{match.awayGoals ?? "-"}</span>
@@ -134,9 +146,8 @@ export default function MatchResult({
             <span
               className="font-medium"
               onClick={() => {
-                setHomeGoals(0);
-                setAwayGoals(1);
-                setTimeout(handleSubmit, 500);
+                setHomeGoals(homeGoals === null ? 0 : homeGoals);
+                setAwayGoals(awayGoals === null ? homeGoals + 1 : awayGoals);
               }}
             >
               {awayTeam.name}
@@ -144,28 +155,6 @@ export default function MatchResult({
           </div>
         </div>
 
-        {/* Action Button */}
-        <div className="ml-4">
-          {isEditing ? (
-            <Button
-              size="sm"
-              onClick={handleSubmit}
-              disabled={homeGoals === null || awayGoals === null}
-              className="h-8 w-8 p-0"
-            >
-              <Check className="h-4 w-4" />
-            </Button>
-          ) : (
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => setIsEditing(true)}
-              className="h-8"
-            >
-              {match.played ? "שינוי" : "Enter Score"}
-            </Button>
-          )}
-        </div>
       </div>
 
       {/* Result Label (when match is played) */}

@@ -18,7 +18,7 @@ jobs:
             - name: Install and Build              
               run: |
                     bun install --prod
-                    bund run build
+                    bun run build
 
             - name: Deploy
               uses: peaceiris/actions-gh-pages@v4

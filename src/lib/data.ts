@@ -16,7 +16,7 @@ export const initialData: LeagueData = {
     { id: "m1", homeTeamId: "t1", awayTeamId: "t5", homeGoals: null, awayGoals: null, played: false, gameWeek: 31 },
     { id: "m2", homeTeamId: "t2", awayTeamId: "t7", homeGoals: null, awayGoals: null, played: false, gameWeek: 31 },
     { id: "m3", homeTeamId: "t3", awayTeamId: "t6", homeGoals: null, awayGoals: null, played: false, gameWeek: 31 },
-    { id: "m4", homeTeamId: "t4", awayTeamId: "t8", homeGoals: null, awayGoals: null, played: false, gameWeek: 31 },
+    { id: "m4", homeTeamId: "t4", awayTeamId: "t8", homeGoals: 2, awayGoals: 0, played: true, gameWeek: 31 },
     { id: "m5", homeTeamId: "t5", awayTeamId: "t8", homeGoals: null, awayGoals: null, played: false, gameWeek: 32 },
     { id: "m6", homeTeamId: "t6", awayTeamId: "t4", homeGoals: null, awayGoals: null, played: false, gameWeek: 32 },
     { id: "m7", homeTeamId: "t7", awayTeamId: "t3", homeGoals: null, awayGoals: null, played: false, gameWeek: 32 },
@@ -98,12 +98,11 @@ export function calculateTeamStats(teams: Team[], matches: Match[]): TeamStats[]
   const statsArray = Object.values(stats);
   statsArray.sort((a, b) => {
     // Sort by points (descending)
-    if (b.points !== a.points) return b.points - a.points;
-    
-    // If points are equal, sort by goal difference (descending)
+    if(a.points > b.points ) return -1;
+    if(a.points < b.points ) return 1;        
     const aGoalDiff = a.goalsFor - a.goalsAgainst;
     const bGoalDiff = b.goalsFor - b.goalsAgainst;
-    if (bGoalDiff !== aGoalDiff) return bGoalDiff - aGoalDiff;
+    return bGoalDiff - aGoalDiff;
     
     // If goal difference is equal, sort by goals scored (descending)
     return b.goalsFor - a.goalsFor;

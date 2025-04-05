@@ -100,12 +100,7 @@ export function calculateTeamStats(teams: Team[], matches: Match[]): TeamStats[]
     // Sort by points (descending)
     if(a.points > b.points ) return -1;
     if(a.points < b.points ) return 1;        
-    const aGoalDiff = a.goalsFor - a.goalsAgainst;
-    const bGoalDiff = b.goalsFor - b.goalsAgainst;
-    return bGoalDiff - aGoalDiff;
-    
-    // If goal difference is equal, sort by goals scored (descending)
-    return b.goalsFor - a.goalsFor;
+    return b.goalDifference - a.goalDifference
   });
 
   // Assign positions

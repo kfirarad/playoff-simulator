@@ -12,6 +12,8 @@ interface LeagueContextType {
   updateMatchResult: (outcome: MatchOutcome) => void;
   setCurrentGameWeek: (week: number) => void;
   resetLeague: () => void;
+  simulations: number;
+  setSimulations: (simulations: number) => void;
 }
 
 const LeagueContext = createContext<LeagueContextType | undefined>(undefined);
@@ -19,16 +21,18 @@ const LeagueContext = createContext<LeagueContextType | undefined>(undefined);
 export function LeagueProvider({ children }: { children: React.ReactNode }) {
   const [leagueData, setLeagueData] = useState<LeagueData>(initialData);
   const [teamStats, setTeamStats] = useState<TeamStats[]>([]);
+  const [simulations, setSimulations] = useState<number>(10000);
 
   useEffect(() => {
     // Calculate initial standings with probabilities
     const stats = calculateProbabilities(
       leagueData.teams, 
       leagueData.matches,
-      leagueData.currentGameWeek
+      leagueData.currentGameWeek,
+      simulations
     );
     setTeamStats(stats);
-  }, [leagueData]);
+  }, [leagueData, simulations]);
 
   const updateMatchResult = (outcome: MatchOutcome) => {
     const { matchId, homeGoals, awayGoals } = outcome;
@@ -76,6 +80,8 @@ export function LeagueProvider({ children }: { children: React.ReactNode }) {
         updateMatchResult,
         setCurrentGameWeek,
         resetLeague,
+        simulations,
+        setSimulations
       }}
     >
       {children}

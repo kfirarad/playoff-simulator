@@ -115,9 +115,9 @@ export function calculateTeamStats(teams: Team[], matches: Match[]): TeamStats[]
 export const calculateProbabilities = function calculateProbabilities(
   teams: Team[], 
   currentMatches: Match[],
-  currentGameWeek: number
+  currentGameWeek: number,
+  simulations = 10000
 ): TeamStats[] {
-  const simulations = 10000;
   const topPositionCounts: { [key: string]: number } = {};
   
   // Initialize counts

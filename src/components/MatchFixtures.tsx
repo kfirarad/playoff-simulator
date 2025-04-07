@@ -17,7 +17,7 @@ interface MatchFixturesProps {
 }
 
 export default function MatchFixtures({ teams, matches, currentGameWeek }: MatchFixturesProps) {
-  const { setCurrentGameWeek } = useLeague();
+  const { simulations, setSimulations } = useLeague();
   const [selectedWeek, setSelectedWeek] = useState<string>(currentGameWeek.toString());
   
   // Generate array of game weeks (1 to 7)
@@ -136,6 +136,12 @@ export default function MatchFixtures({ teams, matches, currentGameWeek }: Match
               ))
             }
         </Tabs>
+
+            <div className="text-xs text-muted-foreground mt-4">
+              מספר סימולציות: 
+              <input type="number" onChange={(e) => setSimulations(e.target.value)} defaultValue={10000} step={10000} min={10000} className="w-16 text-center mx-2" size={10} />
+            </div>
+
       </CardContent>
     </Card>
   );

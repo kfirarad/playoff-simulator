@@ -1,6 +1,9 @@
-
 import React, { createContext, useContext, useState, useEffect } from "react";
-import { initialData, calculateTeamStats, calculateProbabilities } from "@/lib/data";
+import {
+  initialData,
+  calculateTeamStats,
+  calculateProbabilities,
+} from "@/lib/data";
 import { LeagueData, Match, MatchOutcome, Team, TeamStats } from "@/lib/types";
 import { toast } from "@/components/ui/use-toast";
 
@@ -12,6 +15,7 @@ interface LeagueContextType {
   updateMatchResult: (outcome: MatchOutcome) => void;
   setCurrentGameWeek: (week: number) => void;
   resetLeague: () => void;
+  randomizeLeague: () => void;
   simulations: number;
   setSimulations: (simulations: number) => void;
 }
@@ -19,31 +23,36 @@ interface LeagueContextType {
 const LeagueContext = createContext<LeagueContextType | undefined>(undefined);
 
 export function LeagueProvider({ children }: { children: React.ReactNode }) {
-  const [leagueData, setLeagueData] = useState<LeagueData>(initialData);
+  const [leagueData, setLeagueData] = useState<LeagueData>(() => {
+    const saved = localStorage.getItem("leagueData");
+    return saved ? JSON.parse(saved) : initialData;
+  });
   const [teamStats, setTeamStats] = useState<TeamStats[]>([]);
   const [simulations, setSimulations] = useState<number>(10000);
 
   useEffect(() => {
+    localStorage.setItem("leagueData", JSON.stringify(leagueData));
+
     // Calculate initial standings with probabilities
     const stats = calculateProbabilities(
-      leagueData.teams, 
+      leagueData.teams,
       leagueData.matches,
       leagueData.currentGameWeek,
-      simulations
+      simulations,
     );
     setTeamStats(stats);
   }, [leagueData, simulations]);
 
   const updateMatchResult = (outcome: MatchOutcome) => {
     const { matchId, homeGoals, awayGoals } = outcome;
-    
+
     setLeagueData((prevData) => {
       const updatedMatches = prevData.matches.map((match) => {
-        if (match.id === matchId) {          
+        if (match.id === matchId) {
           return {
             ...match,
             homeGoals,
-            awayGoals,            
+            awayGoals,
           };
         }
         return match;
@@ -65,9 +74,31 @@ export function LeagueProvider({ children }: { children: React.ReactNode }) {
 
   const resetLeague = () => {
     setLeagueData(initialData);
+    localStorage.removeItem("leagueData");
     toast({
-      title: "איפוס הושלם",      
+      title: "איפוס הושלם",
     });
+  };
+
+  const randomizeLeague = () => {
+    setLeagueData((prevData) => {
+      const updatedMatches = prevData.matches.map((match) => {
+        if (match.homeGoals === null || match.awayGoals === null) {
+          return {
+            ...match,
+            homeGoals: Math.floor(Math.random() * 4), // Random 0-3
+            awayGoals: Math.floor(Math.random() * 4), // Random 0-3
+          };
+        }
+        return match;
+      });
+
+      return {
+        ...prevData,
+        matches: updatedMatches,
+      };
+    });
+    toast({ title: "תוצאות הוגרלו" });
   };
 
   return (
@@ -80,8 +111,9 @@ export function LeagueProvider({ children }: { children: React.ReactNode }) {
         updateMatchResult,
         setCurrentGameWeek,
         resetLeague,
+        randomizeLeague, // Add to context
         simulations,
-        setSimulations
+        setSimulations,
       }}
     >
       {children}

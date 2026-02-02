@@ -1,4 +1,3 @@
-
 import { useEffect, useRef, useState } from "react";
 import { Match, Team } from "@/lib/types";
 import { useLeague } from "@/contexts/LeagueContext";
@@ -16,25 +15,39 @@ interface MatchFixturesProps {
   currentGameWeek: number;
 }
 
-export default function MatchFixtures({ teams, matches, currentGameWeek }: MatchFixturesProps) {
+export default function MatchFixtures({
+  teams,
+  matches,
+  currentGameWeek,
+}: MatchFixturesProps) {
   const { simulations, setSimulations } = useLeague();
-  const [selectedWeek, setSelectedWeek] = useState<string>(currentGameWeek.toString());
-  
-  // Generate array of game weeks (1 to 7)
-  const gameWeeks = Array.from({ length: 7 }, (_, i) => i + 1 + 30);
-  
+  const [selectedWeek, setSelectedWeek] = useState<string>(
+    currentGameWeek.toString(),
+  );
+
+  const gameWeeks = [22, 23, 24, 25, 26];
+
   // Filter matches by game week
   const matchesForSelectedWeek = matches.filter(
-    (match) => match.gameWeek === parseInt(selectedWeek)
+    (match) => match.gameWeek === parseInt(selectedWeek),
   );
-  
+
   // Handle game week change
   const handleGameWeekChange = (week: string) => {
     setSelectedWeek(week);
   };
 
-  const [groupBy, setGroupBy] = useState<'round' | 'team'>('round');
+  const [groupBy, setGroupBy] = useState<"round" | "team">("round");
   const tabRef = useRef<HTMLButtonElement>(null);
+
+  // Sort teams so Hapoel Petah Tikva is first
+  const sortedTeams = [...teams].sort((a, b) => {
+    if (a.name.includes("הפועל פתח תקוה") || a.name.includes("הפועל פתח-תקוה"))
+      return -1;
+    if (b.name.includes("הפועל פתח תקוה") || b.name.includes("הפועל פתח-תקוה"))
+      return 1;
+    return 0; // Keep original order for others
+  });
 
   return (
     <Card className="shadow-sm hover-scale transition-all animate-fade-in">
@@ -47,80 +60,73 @@ export default function MatchFixtures({ teams, matches, currentGameWeek }: Match
           <Button
             variant="outline"
             size="sm"
-            onClick={() => setGroupBy(groupBy === 'round' ? 'team' : 'round')}
+            onClick={() => {
+              if (groupBy === "round") {
+                setGroupBy("team");
+                if (sortedTeams.length > 0) {
+                  setSelectedWeek(sortedTeams[0].id);
+                }
+              } else {
+                setGroupBy("round");
+                setSelectedWeek(currentGameWeek.toString());
+              }
+            }}
             className="text-xs"
           >
-            {groupBy === 'round' ? "לפי קבוצות" : "לפי מחזור"}
+            {groupBy === "round" ? "לפי קבוצות" : "לפי מחזור"}
           </Button>
         </div>
       </CardHeader>
       <CardContent>
-        <Tabs 
-          value={selectedWeek} 
+        <Tabs
+          value={selectedWeek}
           onValueChange={handleGameWeekChange}
           className="w-full"
         >
-          <TabsList className="w-full flex justify-between " style={{ direction: "rtl"}}>
-            {groupBy === 'round' && gameWeeks.map((week) => (
-              <TabsTrigger
-                key={week}
-                value={week.toString()}
-                className={cn(
-                  week < currentGameWeek ? "text-muted-foreground" : "",
-                  week === currentGameWeek ? "font-medium" : ""
-                )}
-                ref={tabRef}
-              >
-                {week}
-              </TabsTrigger>
-            ))}
-            {
-              groupBy === 'team' && teams.slice(0,4).map((team) => (
+          <TabsList
+            className="w-full h-auto flex flex-wrap justify-between gap-1"
+            style={{ direction: "rtl" }}
+          >
+            {groupBy === "round" &&
+              gameWeeks.map((week) => (
+                <TabsTrigger
+                  key={week}
+                  value={week.toString()}
+                  className={cn(
+                    week < currentGameWeek ? "text-muted-foreground" : "",
+                    week === currentGameWeek ? "font-medium" : "",
+                  )}
+                  ref={tabRef}
+                >
+                  {week}
+                </TabsTrigger>
+              ))}
+            {groupBy === "team" &&
+              sortedTeams.map((team) => (
                 <TabsTrigger
                   key={team.id}
                   value={team.id}
-                  className={cn(
-                    team.id === selectedWeek ? "font-medium" : ""
-                  )}
+                  className={cn(team.id === selectedWeek ? "font-medium" : "")}
                 >
                   {team.name}
                 </TabsTrigger>
-              ))
-            }
-
+              ))}
           </TabsList>
-          
-          {groupBy === 'round' && gameWeeks.map((week) => (
-            <TabsContent key={week} value={week.toString()} className="pt-2">
-              <div className="space-y-4"  style={{ direction: "rtl"}}>
-                {matches
-                  .filter((match) => match.gameWeek === week)
-                  .map((match) => {
-                    const homeTeam = teams.find((t) => t.id === match.homeTeamId);
-                    const awayTeam = teams.find((t) => t.id === match.awayTeamId);
-                    
-                    return (
-                      <MatchResult
-                        key={match.id}
-                        match={match}
-                        homeTeam={homeTeam as Team}
-                        awayTeam={awayTeam as Team}
-                      />
-                    );
-                  })}
-              </div>
-              </TabsContent>))
-          }
-            {
-              groupBy === 'team' && teams.slice(0,4).map((team) => (
-                <TabsContent key={team.id} value={team.id.toString()} className="pt-2">
-                  <div className="space-y-4"  style={{ direction: "rtl"}}>
+
+          {groupBy === "round" &&
+            gameWeeks.map((week) => (
+              <TabsContent key={week} value={week.toString()} className="pt-2">
+                <div className="space-y-4" style={{ direction: "rtl" }}>
                   {matches
-                    .filter((match) =>(match.homeTeamId === team.id || match.awayTeamId === team.id))
+                    .filter((match) => match.gameWeek === week)
                     .map((match) => {
-                      const homeTeam = teams.find((t) => t.id === match.homeTeamId);
-                      const awayTeam = teams.find((t) => t.id === match.awayTeamId);
-                      
+                      const homeTeam = teams.find(
+                        (t) => t.id === match.homeTeamId,
+                      );
+                      const awayTeam = teams.find(
+                        (t) => t.id === match.awayTeamId,
+                      );
+
                       return (
                         <MatchResult
                           key={match.id}
@@ -130,18 +136,57 @@ export default function MatchFixtures({ teams, matches, currentGameWeek }: Match
                         />
                       );
                     })}
-                    </div>
-                </TabsContent>
+                </div>
+              </TabsContent>
+            ))}
+          {groupBy === "team" &&
+            teams.map((team) => (
+              <TabsContent
+                key={team.id}
+                value={team.id.toString()}
+                className="pt-2"
+              >
+                <div className="space-y-4" style={{ direction: "rtl" }}>
+                  {matches
+                    .filter(
+                      (match) =>
+                        match.homeTeamId === team.id ||
+                        match.awayTeamId === team.id,
+                    )
+                    .map((match) => {
+                      const homeTeam = teams.find(
+                        (t) => t.id === match.homeTeamId,
+                      );
+                      const awayTeam = teams.find(
+                        (t) => t.id === match.awayTeamId,
+                      );
 
-              ))
-            }
+                      return (
+                        <MatchResult
+                          key={match.id}
+                          match={match}
+                          homeTeam={homeTeam as Team}
+                          awayTeam={awayTeam as Team}
+                        />
+                      );
+                    })}
+                </div>
+              </TabsContent>
+            ))}
         </Tabs>
 
-            <div className="text-xs text-muted-foreground mt-4">
-              מספר סימולציות: 
-              <input type="number" onChange={(e) => setSimulations(e.target.value)} defaultValue={10000} step={10000} min={10000} className="w-16 text-center mx-2" size={10} />
-            </div>
-
+        <div className="text-xs text-muted-foreground mt-4">
+          מספר סימולציות:
+          <input
+            type="number"
+            onChange={(e) => setSimulations(e.target.value)}
+            defaultValue={10000}
+            step={10000}
+            min={10000}
+            className="w-16 text-center mx-2"
+            size={10}
+          />
+        </div>
       </CardContent>
     </Card>
   );

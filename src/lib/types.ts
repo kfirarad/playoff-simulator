@@ -4,6 +4,7 @@ export interface Team {
   name: string;
   goalDifference: number;
   points: number;
+  played: number;
 }
 
 export interface TeamStats {

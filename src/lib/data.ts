@@ -1,48 +1,71 @@
 import { LeagueData, Match, Team, TeamStats } from "./types";
 import { debounce } from "lodash";
+
 export const initialData: LeagueData = {
   teams: [
-    { id: "t1", name: "הפועל תל-אביב", points: 72, goalDifference: 43 },
-    { id: "t2", name: "הפועל פתח-תקוה", points: 71 , goalDifference: 33},
-    { id: "t3", name: "הפועל כפר-שלם", points: 59, goalDifference: 24},
-    { id: "t4", name: "הפועל רמת גן", points: 56, goalDifference: 29 },
-    { id: "t5", name: "בני יהודה", points: 44 , goalDifference: 1},
-    { id: "t6", name: "מכבי הרצליה", points: 42, goalDifference: -14 },
-    { id: "t7", name: "הפועל כפר סבא", points: 40, goalDifference: 0 },
-    { id: "t8", name: "הפועל ראשון לציון", points: 40, goalDifference: -2 },
+    { id: "t1", name: "הפועל באר שבע", points: 48, goalDifference: 29, played: 21 },
+    { id: "t2", name: "ביתר ירושלים", points: 47, goalDifference: 24, played: 21 },
+    { id: "t3", name: "הפועל תל אביב", points: 38, goalDifference: 14, played: 21 },
+    { id: "t4", name: "מכבי תל אביב", points: 36, goalDifference: 14, played: 20 },
+    { id: "t5", name: "מכבי חיפה", points: 35, goalDifference: 18, played: 21 },
+    { id: "t6", name: "הפועל פתח תקוה", points: 29, goalDifference: 4, played: 21 },
+    { id: "t7", name: "בני סכנין", points: 28, goalDifference: -3, played: 21 },
+    { id: "t8", name: "מכבי נתניה", points: 27, goalDifference: -9, played: 21 },
+    { id: "t9", name: "עירוני טבריה", points: 22, goalDifference: -18, played: 21 },
+    { id: "t10", name: "הפועל חיפה", points: 20, goalDifference: -9, played: 21 },
+    { id: "t11", name: "מ.ס. אשדוד", points: 20, goalDifference: -17, played: 21 },
+    { id: "t12", name: "הפועל קרית שמונה", points: 19, goalDifference: -6, played: 20 },
+    { id: "t13", name: "הפועל ירושלים", points: 19, goalDifference: -10, played: 21 },
+    { id: "t14", name: "מכבי בני ריינה", points: 11, goalDifference: -31, played: 21 },
   ],
 
   matches: [
-    { id: "m1", homeTeamId: "t1", awayTeamId: "t5", homeGoals: 3, awayGoals: 0, played: true, gameWeek: 31 },
-    { id: "m2", homeTeamId: "t2", awayTeamId: "t7", homeGoals: 1, awayGoals: 0, played: true, gameWeek: 31 },
-    { id: "m3", homeTeamId: "t3", awayTeamId: "t6", homeGoals: 0, awayGoals: 2, played: true, gameWeek: 31 },
-    { id: "m4", homeTeamId: "t4", awayTeamId: "t8", homeGoals: 2, awayGoals: 0, played: true, gameWeek: 31 },
-    { id: "m5", homeTeamId: "t5", awayTeamId: "t8", homeGoals: 2, awayGoals: 4, played: true, gameWeek: 32 },
-    { id: "m6", homeTeamId: "t6", awayTeamId: "t4", homeGoals: 0, awayGoals: 2, played: true, gameWeek: 32 },
-    { id: "m7", homeTeamId: "t7", awayTeamId: "t3", homeGoals: 1, awayGoals: 0, played: true, gameWeek: 32 },
-    { id: "m8", homeTeamId: "t1", awayTeamId: "t2", homeGoals: 0, awayGoals: 0, played: true, gameWeek: 32 },
-    { id: "m9", homeTeamId: "t2", awayTeamId: "t5", homeGoals: 1, awayGoals: 0, played: true, gameWeek: 33 },
-    { id: "m10", homeTeamId: "t3", awayTeamId: "t1", homeGoals: 2, awayGoals: 0, played: true, gameWeek: 33 },
-    { id: "m11", homeTeamId: "t4", awayTeamId: "t7", homeGoals: 4, awayGoals: 2, played: true, gameWeek: 33 },
-    { id: "m12", homeTeamId: "t8", awayTeamId: "t6", homeGoals: 1, awayGoals: 3, played: true, gameWeek: 33 },
-    { id: "m13", homeTeamId: "t5", awayTeamId: "t6", homeGoals: null, awayGoals: null, played: false, gameWeek: 34 },
-    { id: "m14", homeTeamId: "t7", awayTeamId: "t8", homeGoals: null, awayGoals: null, played: false, gameWeek: 34 },
-    { id: "m15", homeTeamId: "t1", awayTeamId: "t4", homeGoals: null, awayGoals: null, played: false, gameWeek: 34 },
-    { id: "m16", homeTeamId: "t2", awayTeamId: "t3", homeGoals: null, awayGoals: null, played: false, gameWeek: 34 },
-    { id: "m17", homeTeamId: "t3", awayTeamId: "t5", homeGoals: null, awayGoals: null, played: false, gameWeek: 35 },
-    { id: "m18", homeTeamId: "t4", awayTeamId: "t2", homeGoals: null, awayGoals: null, played: false, gameWeek: 35 },
-    { id: "m19", homeTeamId: "t8", awayTeamId: "t1", homeGoals: null, awayGoals: null, played: false, gameWeek: 35 },
-    { id: "m20", homeTeamId: "t6", awayTeamId: "t7", homeGoals: null, awayGoals: null, played: false, gameWeek: 35 },
-    { id: "m21", homeTeamId: "t5", awayTeamId: "t7", homeGoals: null, awayGoals: null, played: false, gameWeek: 36 },
-    { id: "m22", homeTeamId: "t1", awayTeamId: "t6", homeGoals: null, awayGoals: null, played: false, gameWeek: 36 },
-    { id: "m23", homeTeamId: "t2", awayTeamId: "t8", homeGoals: null, awayGoals: null, played: false, gameWeek: 36 },
-    { id: "m24", homeTeamId: "t3", awayTeamId: "t4", homeGoals: null, awayGoals: null, played: false, gameWeek: 36 },
-    { id: "m25", homeTeamId: "t4", awayTeamId: "t5", homeGoals: null, awayGoals: null, played: false, gameWeek: 37 },
-    { id: "m26", homeTeamId: "t8", awayTeamId: "t3", homeGoals: null, awayGoals: null, played: false, gameWeek: 37 },
-    { id: "m27", homeTeamId: "t6", awayTeamId: "t2", homeGoals: null, awayGoals: null, played: false, gameWeek: 37 },
-    { id: "m28", homeTeamId: "t7", awayTeamId: "t1", homeGoals: null, awayGoals: null, played: false, gameWeek: 37 }
+    // Round 22
+    { id: "m22-1", homeTeamId: "t9", awayTeamId: "t3", homeGoals: null, awayGoals: null, played: false, gameWeek: 22 },
+    { id: "m22-2", homeTeamId: "t13", awayTeamId: "t5", homeGoals: null, awayGoals: null, played: false, gameWeek: 22 },
+    { id: "m22-3", homeTeamId: "t10", awayTeamId: "t11", homeGoals: null, awayGoals: null, played: false, gameWeek: 22 },
+    { id: "m22-4", homeTeamId: "t7", awayTeamId: "t6", homeGoals: null, awayGoals: null, played: false, gameWeek: 22 },
+    { id: "m22-5", homeTeamId: "t8", awayTeamId: "t12", homeGoals: null, awayGoals: null, played: false, gameWeek: 22 },
+    { id: "m22-6", homeTeamId: "t4", awayTeamId: "t14", homeGoals: null, awayGoals: null, played: false, gameWeek: 22 },
+    { id: "m22-7", homeTeamId: "t1", awayTeamId: "t2", homeGoals: null, awayGoals: null, played: false, gameWeek: 22 },
+
+    // Round 23
+    { id: "m23-1", homeTeamId: "t3", awayTeamId: "t13", homeGoals: null, awayGoals: null, played: false, gameWeek: 23 },
+    { id: "m23-2", homeTeamId: "t6", awayTeamId: "t10", homeGoals: null, awayGoals: null, played: false, gameWeek: 23 },
+    { id: "m23-3", homeTeamId: "t12", awayTeamId: "t9", homeGoals: null, awayGoals: null, played: false, gameWeek: 23 },
+    { id: "m23-4", homeTeamId: "t14", awayTeamId: "t8", homeGoals: null, awayGoals: null, played: false, gameWeek: 23 },
+    { id: "m23-5", homeTeamId: "t11", awayTeamId: "t1", homeGoals: null, awayGoals: null, played: false, gameWeek: 23 },
+    { id: "m23-6", homeTeamId: "t5", awayTeamId: "t7", homeGoals: null, awayGoals: null, played: false, gameWeek: 23 },
+    { id: "m23-7", homeTeamId: "t2", awayTeamId: "t4", homeGoals: null, awayGoals: null, played: false, gameWeek: 23 },
+
+    // Round 24
+    { id: "m24-1", homeTeamId: "t4", awayTeamId: "t11", homeGoals: null, awayGoals: null, played: false, gameWeek: 24 },
+    { id: "m24-2", homeTeamId: "t5", awayTeamId: "t6", homeGoals: null, awayGoals: null, played: false, gameWeek: 24 },
+    { id: "m24-3", homeTeamId: "t13", awayTeamId: "t12", homeGoals: null, awayGoals: null, played: false, gameWeek: 24 },
+    { id: "m24-4", homeTeamId: "t7", awayTeamId: "t3", homeGoals: null, awayGoals: null, played: false, gameWeek: 24 },
+    { id: "m24-5", homeTeamId: "t9", awayTeamId: "t14", homeGoals: null, awayGoals: null, played: false, gameWeek: 24 },
+    { id: "m24-6", homeTeamId: "t1", awayTeamId: "t10", homeGoals: null, awayGoals: null, played: false, gameWeek: 24 },
+    { id: "m24-7", homeTeamId: "t8", awayTeamId: "t2", homeGoals: null, awayGoals: null, played: false, gameWeek: 24 },
+
+    // Round 25
+    { id: "m25-1", homeTeamId: "t14", awayTeamId: "t13", homeGoals: null, awayGoals: null, played: false, gameWeek: 25 },
+    { id: "m25-2", homeTeamId: "t12", awayTeamId: "t7", homeGoals: null, awayGoals: null, played: false, gameWeek: 25 },
+    { id: "m25-3", homeTeamId: "t2", awayTeamId: "t9", homeGoals: null, awayGoals: null, played: false, gameWeek: 25 },
+    { id: "m25-4", homeTeamId: "t10", awayTeamId: "t4", homeGoals: null, awayGoals: null, played: false, gameWeek: 25 },
+    { id: "m25-5", homeTeamId: "t1", awayTeamId: "t6", homeGoals: null, awayGoals: null, played: false, gameWeek: 25 },
+    { id: "m25-6", homeTeamId: "t11", awayTeamId: "t8", homeGoals: null, awayGoals: null, played: false, gameWeek: 25 },
+    { id: "m25-7", homeTeamId: "t3", awayTeamId: "t5", homeGoals: null, awayGoals: null, played: false, gameWeek: 25 },
+
+    // Round 26
+    { id: "m26-1", homeTeamId: "t9", awayTeamId: "t11", homeGoals: null, awayGoals: null, played: false, gameWeek: 26 },
+    { id: "m26-2", homeTeamId: "t4", awayTeamId: "t1", homeGoals: null, awayGoals: null, played: false, gameWeek: 26 },
+    { id: "m26-3", homeTeamId: "t7", awayTeamId: "t14", homeGoals: null, awayGoals: null, played: false, gameWeek: 26 },
+    { id: "m26-4", homeTeamId: "t6", awayTeamId: "t3", homeGoals: null, awayGoals: null, played: false, gameWeek: 26 },
+    { id: "m26-5", homeTeamId: "t5", awayTeamId: "t12", homeGoals: null, awayGoals: null, played: false, gameWeek: 26 },
+    { id: "m26-6", homeTeamId: "t8", awayTeamId: "t10", homeGoals: null, awayGoals: null, played: false, gameWeek: 26 },
+    { id: "m26-7", homeTeamId: "t13", awayTeamId: "t2", homeGoals: null, awayGoals: null, played: false, gameWeek: 26 },
   ],
-  currentGameWeek: 31,
+  currentGameWeek: 22,
 };
 
 
@@ -58,7 +81,7 @@ export function calculateTeamStats(teams: Team[], matches: Match[]): TeamStats[]
   teams.forEach((team) => {
     stats[team.id] = {
       teamId: team.id,
-      played: 30,
+      played: team.played || 0,
       goalDifference: initialData.teams.find((t) => t.id === team.id)?.goalDifference || 0,
       points: initialData.teams.find((t) => t.id === team.id)?.points || 0,
       goalsFor: 0,
@@ -98,8 +121,8 @@ export function calculateTeamStats(teams: Team[], matches: Match[]): TeamStats[]
   const statsArray = Object.values(stats);
   statsArray.sort((a, b) => {
     // Sort by points (descending)
-    if(a.points > b.points ) return -1;
-    if(a.points < b.points ) return 1;        
+    if (a.points > b.points) return -1;
+    if (a.points < b.points) return 1;
     return b.goalDifference - a.goalDifference
   });
 
@@ -113,13 +136,13 @@ export function calculateTeamStats(teams: Team[], matches: Match[]): TeamStats[]
 
 
 export const calculateProbabilities = function calculateProbabilities(
-  teams: Team[], 
+  teams: Team[],
   currentMatches: Match[],
   currentGameWeek: number,
   simulations = 10000
 ): TeamStats[] {
   const topPositionCounts: { [key: string]: number } = {};
-  
+
   // Initialize counts
   teams.forEach((team) => {
     topPositionCounts[team.id] = 0;
@@ -129,10 +152,10 @@ export const calculateProbabilities = function calculateProbabilities(
   for (let i = 0; i < simulations; i++) {
     // Clone current matches
     const simulatedMatches = JSON.parse(JSON.stringify(currentMatches)) as Match[];
-    
+
     // mark matches as played if have outcome
     simulatedMatches.forEach((match) => {
-      if(match.awayGoals !== null && match.homeGoals !== null) {
+      if (match.awayGoals !== null && match.homeGoals !== null) {
         match.played = true;
       }
     });
@@ -146,18 +169,18 @@ export const calculateProbabilities = function calculateProbabilities(
         match.played = true;
       }
     });
-    
+
     // Calculate final standings for this simulation
     const simulatedStats = calculateTeamStats(teams, simulatedMatches);
-    
-    simulatedStats.slice(0, 2).forEach((stats) => {
+
+    simulatedStats.slice(0, 6).forEach((stats) => {
       topPositionCounts[stats.teamId]++;
     });
   }
-  
+
   // Calculate current standings and add probability
   const currentStats = calculateTeamStats(teams, currentMatches);
-  
+
   // Add probability to each team's stats
   return currentStats.map((stats) => {
     return {

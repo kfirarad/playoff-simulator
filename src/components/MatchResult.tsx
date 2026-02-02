@@ -5,6 +5,7 @@ import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Check } from "lucide-react";
+import { trackEvent } from "@/lib/analytics";
 
 interface MatchResultProps {
   match: Match;
@@ -22,6 +23,12 @@ export default function MatchResult({
   // Local state for input values
   const [homeGoals, setHomeGoals] = useState<number | null>(match.homeGoals);
   const [awayGoals, setAwayGoals] = useState<number | null>(match.awayGoals);
+
+  // Sync state with props when match updates (e.g. reset/randomize)
+  useEffect(() => {
+    setHomeGoals(match.homeGoals);
+    setAwayGoals(match.awayGoals);
+  }, [match.homeGoals, match.awayGoals]);
 
   const isPlayed = match.played;
 
@@ -43,7 +50,7 @@ export default function MatchResult({
   }
 
   const handleScoreChange = (team: "home" | "away", value: string) => {
-      const numValue = parseInt(value);
+    const numValue = parseInt(value);
     if (value === "" || isNaN(numValue)) {
       if (team === "home") {
         setHomeGoals(0);
@@ -54,12 +61,12 @@ export default function MatchResult({
       const goals = Math.max(0, Math.min(99, numValue)); // Limit between 0-99
       if (team === "home") {
         setHomeGoals(goals);
-        if(awayGoals === null) {
+        if (awayGoals === null) {
           setAwayGoals(0);
         }
       } else {
         setAwayGoals(goals);
-        if(homeGoals === null) {
+        if (homeGoals === null) {
           setHomeGoals(0);
         }
       }
@@ -68,22 +75,31 @@ export default function MatchResult({
 
   useEffect(() => {
     if (homeGoals !== null && awayGoals !== null) {
+      if (match.homeGoals !== homeGoals || match.awayGoals !== awayGoals) {
+        trackEvent("update_match_result", {
+          match_id: match.id,
+          home_team: homeTeam.name,
+          away_team: awayTeam.name,
+          score: `${homeGoals}-${awayGoals}`,
+        });
+      }
+
       updateMatchResult({
         matchId: match.id,
         homeGoals,
         awayGoals,
       });
-    }}, [homeGoals, awayGoals]);
+    }
+  }, [homeGoals, awayGoals]);
 
-
-    console.log('played', match.played);
+  console.log("played", match.played);
 
   return (
     <div
       className={cn(
         "p-4 rounded-lg border transition-all duration-300 animate-slide-up",
         match.played ? "bg-white shadow-sm" : "bg-secondary/50",
-        !isPlayed ? "border-primary/20 shadow-sm" : "border-transparent"
+        !isPlayed ? "border-primary/20 shadow-sm" : "border-transparent",
       )}
     >
       <div className="flex items-center justify-between">
@@ -92,7 +108,7 @@ export default function MatchResult({
           <div className="text-right flex justify-end items-center gap-2">
             <span
               className="font-medium"
-              onClick={() => {              
+              onClick={() => {
                 setAwayGoals(awayGoals === null ? 0 : awayGoals);
                 setHomeGoals(homeGoals === null ? awayGoals + 1 : homeGoals);
               }}
@@ -113,11 +129,15 @@ export default function MatchResult({
                   onChange={(e) => handleScoreChange("home", e.target.value)}
                   className="w-12 text-center p-1 h-8"
                 />
-                <span className="text-muted-foreground"
+                <span
+                  className="text-muted-foreground"
                   onClick={() => {
                     setHomeGoals(1);
                     setAwayGoals(1);
-                  }}>-</span>
+                  }}
+                >
+                  -
+                </span>
                 <Input
                   type="number"
                   min={0}
@@ -128,11 +148,13 @@ export default function MatchResult({
                 />
               </div>
             ) : (
-              <div className="text-xl font-semibold flex items-center gap-2"
+              <div
+                className="text-xl font-semibold flex items-center gap-2"
                 onClick={() => {
-                setHomeGoals(homeGoals === null ? 0 : homeGoals);
-                setAwayGoals(awayGoals === null ? homeGoals : awayGoals);
-              }}>
+                  setHomeGoals(homeGoals === null ? 0 : homeGoals);
+                  setAwayGoals(awayGoals === null ? homeGoals : awayGoals);
+                }}
+              >
                 <span>{match.homeGoals ?? "-"}</span>
                 <span className="text-muted-foreground text-sm">:</span>
                 <span>{match.awayGoals ?? "-"}</span>
@@ -154,7 +176,6 @@ export default function MatchResult({
             </span>
           </div>
         </div>
-
       </div>
 
       {/* Result Label (when match is played) */}

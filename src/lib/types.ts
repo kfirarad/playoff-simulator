@@ -7,6 +7,7 @@ export interface Team {
   played: number;
   color?: string;
   textColor?: string;
+  stats?: TeamStats;
 }
 
 export interface TeamStats {

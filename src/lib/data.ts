@@ -144,9 +144,25 @@ export const calculateProbabilities = function calculateProbabilities(
   teams: Team[],
   currentMatches: Match[],
   currentGameWeek: number,
-  simulations = 10000
+  simulations = 10000,
+  useWeighted = false
 ): TeamStats[] {
   const topPositionCounts: { [key: string]: number } = {};
+
+  // Calculate team strengths if weighted simulation is enabled
+  const teamStrengths: { [key: string]: number } = {};
+  if (useWeighted) {
+    teams.forEach((team) => {
+      // Base strength calculation: points per game
+      // Add a small base value to prevent 0 strength
+      const pointsPerGame = team.stats && team.stats.played > 0
+        ? team.stats.points / team.stats.played
+        : team.points / Math.max(1, team.played); // Fallback to initial data if stats not computed yet
+
+      // Normalize to 0-1 range roughly (max 3 points per game)
+      teamStrengths[team.id] = (pointsPerGame / 3) * 0.7 + 0.3; // 30% base chance, 70% skill based
+    });
+  }
 
   // Initialize counts
   teams.forEach((team) => {
@@ -168,9 +184,41 @@ export const calculateProbabilities = function calculateProbabilities(
     // Randomly simulate remaining matches
     simulatedMatches.forEach((match) => {
       if (!match.played && match.gameWeek >= currentGameWeek) {
-        // Simple random outcome generator for simulation
-        match.homeGoals = Math.floor(Math.random() * 4);
-        match.awayGoals = Math.floor(Math.random() * 4);
+        if (useWeighted) {
+          const homeStrength = teamStrengths[match.homeTeamId] || 0.5;
+          const awayStrength = teamStrengths[match.awayTeamId] || 0.5;
+
+          // Home advantage factor (e.g., 10% boost)
+          const homeAdvantage = 1.1;
+
+          const homePower = homeStrength * homeAdvantage;
+          const totalPower = homePower + awayStrength;
+
+          const homeWinProb = homePower / totalPower;
+
+          // Determine winner based on probability
+          const rand = Math.random();
+
+          // Generate score based on winner
+          // Basic logic: winner gets more goals
+          if (rand < homeWinProb * 0.4) {
+            // Home Win
+            match.homeGoals = Math.floor(Math.random() * 3) + 1; // 1-3
+            match.awayGoals = Math.floor(Math.random() * match.homeGoals); // less than home
+          } else if (rand > 1 - (1 - homeWinProb) * 0.4) {
+            // Away Win
+            match.awayGoals = Math.floor(Math.random() * 3) + 1; // 1-3
+            match.homeGoals = Math.floor(Math.random() * match.awayGoals); // less than away
+          } else {
+            // Draw
+            match.homeGoals = Math.floor(Math.random() * 3); // 0-2
+            match.awayGoals = match.homeGoals;
+          }
+        } else {
+          // Pure random
+          match.homeGoals = Math.floor(Math.random() * 4);
+          match.awayGoals = Math.floor(Math.random() * 4);
+        }
         match.played = true;
       }
     });

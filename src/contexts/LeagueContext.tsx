@@ -19,6 +19,8 @@ interface LeagueContextType {
   randomizeLeague: () => void;
   simulations: number;
   setSimulations: (simulations: number) => void;
+  useWeighted: boolean;
+  setUseWeighted: (use: boolean) => void;
 }
 
 const LeagueContext = createContext<LeagueContextType | undefined>(undefined);
@@ -35,6 +37,7 @@ export function LeagueProvider({ children }: { children: React.ReactNode }) {
   });
   const [teamStats, setTeamStats] = useState<TeamStats[]>([]);
   const [simulations, setSimulations] = useState<number>(10000);
+  const [useWeighted, setUseWeighted] = useState<boolean>(false);
 
   useEffect(() => {
     const savedHash = localStorage.getItem("dataHash");
@@ -59,9 +62,10 @@ export function LeagueProvider({ children }: { children: React.ReactNode }) {
       leagueData.matches,
       leagueData.currentGameWeek,
       simulations,
+      useWeighted,
     );
     setTeamStats(stats);
-  }, [leagueData, simulations]);
+  }, [leagueData, simulations, useWeighted]);
 
   const updateMatchResult = (outcome: MatchOutcome) => {
     const { matchId, homeGoals, awayGoals } = outcome;
@@ -145,6 +149,8 @@ export function LeagueProvider({ children }: { children: React.ReactNode }) {
         randomizeLeague, // Add to context
         simulations,
         setSimulations,
+        useWeighted,
+        setUseWeighted,
       }}
     >
       {children}

@@ -1,5 +1,6 @@
 import { Team, TeamStats } from "@/lib/types";
 import { cn } from "@/lib/utils";
+import { useLeague } from "@/contexts/LeagueContext";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Table,
@@ -20,6 +21,7 @@ export default function StandingsTable({
   teams,
   standings,
 }: StandingsTableProps) {
+  const { useWeighted } = useLeague();
   return (
     <Card className="shadow-sm hover-scale transition-all animate-fade-in">
       <CardHeader className="pb-2">
@@ -148,6 +150,11 @@ export default function StandingsTable({
           </TableBody>
         </Table>
       </CardContent>
+      <div className="p-4 text-center text-xs text-muted-foreground border-t bg-muted/20">
+        {useWeighted
+          ? "הסיכוי המחושב על בסיס חוזק קבוצות יחסי (נקודות למשחק)"
+          : "הסיכוי המחושב על בסיס תוצאות אקראיות לחלוטין ללא התחשבות במאזני הכוחות"}
+      </div>
     </Card>
   );
 }

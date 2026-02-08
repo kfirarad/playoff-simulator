@@ -18,7 +18,7 @@ export default function MatchResult({
   homeTeam,
   awayTeam,
 }: MatchResultProps) {
-  const { updateMatchResult } = useLeague();
+  const { updateMatchResult, teamStats, useWeighted } = useLeague();
 
   // Local state for input values
   const [homeGoals, setHomeGoals] = useState<number | null>(match.homeGoals);
@@ -106,20 +106,29 @@ export default function MatchResult({
         <div className="grid grid-cols-[1fr_auto_1fr] w-full gap-1 sm:gap-4 md:gap-10 items-center">
           {/* Home Team */}
           <div className="text-right flex justify-end items-center">
-            <span
-              className="px-2 py-0.5 sm:px-3 sm:py-1 rounded-full text-xs sm:text-sm font-bold cursor-pointer transition-all hover:scale-105 shadow-sm inline-block whitespace-nowrap"
-              style={{
-                backgroundColor: homeTeam.color,
-                color: homeTeam.textColor,
-                border: `1px solid ${homeTeam.color}cc`,
-              }}
-              onClick={() => {
-                setAwayGoals(awayGoals === null ? 0 : awayGoals);
-                setHomeGoals(homeGoals === null ? awayGoals + 1 : homeGoals);
-              }}
-            >
-              {homeTeam.name}
-            </span>
+            <div className="flex flex-col items-end gap-0.5">
+              <span
+                className="px-2 py-0.5 sm:px-3 sm:py-1 rounded-full text-xs sm:text-sm font-bold cursor-pointer transition-all hover:scale-105 shadow-sm inline-block whitespace-nowrap"
+                style={{
+                  backgroundColor: homeTeam.color,
+                  color: homeTeam.textColor,
+                  border: `1px solid ${homeTeam.color}cc`,
+                }}
+                onClick={() => {
+                  setAwayGoals(awayGoals === null ? 0 : awayGoals);
+                  setHomeGoals(homeGoals === null ? awayGoals + 1 : homeGoals);
+                }}
+              >
+                {homeTeam.name}
+              </span>
+              {useWeighted && (
+                <span className="text-[9px] text-muted-foreground font-medium">
+                  {teamStats.find((s) => s.teamId === homeTeam.id)?.strength
+                    ? `${(teamStats.find((s) => s.teamId === homeTeam.id)!.strength! * 100).toFixed(0)}%`
+                    : ""}
+                </span>
+              )}
+            </div>
           </div>
 
           <div className="flex justify-center items-center">
@@ -170,20 +179,29 @@ export default function MatchResult({
 
           {/* Away Team */}
           <div className="text-left flex items-center">
-            <span
-              className="px-2 py-0.5 sm:px-3 sm:py-1 rounded-full text-xs sm:text-sm font-bold cursor-pointer transition-all hover:scale-105 shadow-sm inline-block whitespace-nowrap"
-              style={{
-                backgroundColor: awayTeam.color,
-                color: awayTeam.textColor,
-                border: `1px solid ${awayTeam.color}cc`,
-              }}
-              onClick={() => {
-                setHomeGoals(homeGoals === null ? 0 : homeGoals);
-                setAwayGoals(awayGoals === null ? homeGoals + 1 : awayGoals);
-              }}
-            >
-              {awayTeam.name}
-            </span>
+            <div className="flex flex-col items-start gap-0.5">
+              <span
+                className="px-2 py-0.5 sm:px-3 sm:py-1 rounded-full text-xs sm:text-sm font-bold cursor-pointer transition-all hover:scale-105 shadow-sm inline-block whitespace-nowrap"
+                style={{
+                  backgroundColor: awayTeam.color,
+                  color: awayTeam.textColor,
+                  border: `1px solid ${awayTeam.color}cc`,
+                }}
+                onClick={() => {
+                  setHomeGoals(homeGoals === null ? 0 : homeGoals);
+                  setAwayGoals(awayGoals === null ? homeGoals + 1 : awayGoals);
+                }}
+              >
+                {awayTeam.name}
+              </span>
+              {useWeighted && (
+                <span className="text-[9px] text-muted-foreground font-medium">
+                  {teamStats.find((s) => s.teamId === awayTeam.id)?.strength
+                    ? `${(teamStats.find((s) => s.teamId === awayTeam.id)!.strength! * 100).toFixed(0)}%`
+                    : ""}
+                </span>
+              )}
+            </div>
           </div>
         </div>
       </div>

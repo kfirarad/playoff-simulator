@@ -19,6 +19,7 @@ export interface TeamStats {
   points: number;
   position?: number;
   probability?: number;
+  strength?: number;
 }
 
 export interface Match {

@@ -149,18 +149,21 @@ export const calculateProbabilities = function calculateProbabilities(
 ): TeamStats[] {
   const topPositionCounts: { [key: string]: number } = {};
 
+  // Calculate current standings first to get accurate team performance
+  const currentStats = calculateTeamStats(teams, currentMatches);
+
   // Calculate team strengths if weighted simulation is enabled
   const teamStrengths: { [key: string]: number } = {};
   if (useWeighted) {
-    teams.forEach((team) => {
-      // Base strength calculation: points per game
-      // Add a small base value to prevent 0 strength
-      const pointsPerGame = team.stats && team.stats.played > 0
-        ? team.stats.points / team.stats.played
-        : team.points / Math.max(1, team.played); // Fallback to initial data if stats not computed yet
+    currentStats.forEach((stats) => {
+      // Base strength calculation: points per game from current standings
+      const pointsPerGame = stats.played > 0
+        ? stats.points / stats.played
+        : 0;
 
-      // Normalize to 0-1 range roughly (max 3 points per game)
-      teamStrengths[team.id] = (pointsPerGame / 3) * 0.7 + 0.3; // 30% base chance, 70% skill based
+      // Normalize to 0-1 range (max 3 points per game)
+      // Using 30% base chance, 70% skill based to make strength differences more pronounced
+      teamStrengths[stats.teamId] = (pointsPerGame / 3) * 0.7 + 0.3;
     });
   }
 
@@ -201,11 +204,11 @@ export const calculateProbabilities = function calculateProbabilities(
 
           // Generate score based on winner
           // Basic logic: winner gets more goals
-          if (rand < homeWinProb * 0.4) {
+          if (rand < homeWinProb * 0.6) {
             // Home Win
             match.homeGoals = Math.floor(Math.random() * 3) + 1; // 1-3
             match.awayGoals = Math.floor(Math.random() * match.homeGoals); // less than home
-          } else if (rand > 1 - (1 - homeWinProb) * 0.4) {
+          } else if (rand > 1 - (1 - homeWinProb) * 0.6) {
             // Away Win
             match.awayGoals = Math.floor(Math.random() * 3) + 1; // 1-3
             match.homeGoals = Math.floor(Math.random() * match.awayGoals); // less than away
@@ -231,14 +234,12 @@ export const calculateProbabilities = function calculateProbabilities(
     });
   }
 
-  // Calculate current standings and add probability
-  const currentStats = calculateTeamStats(teams, currentMatches);
-
-  // Add probability to each team's stats
+  // Add probability and strength to each team's stats
   return currentStats.map((stats) => {
     return {
       ...stats,
       probability: (topPositionCounts[stats.teamId] / simulations) * 100,
+      strength: useWeighted ? teamStrengths[stats.teamId] : undefined,
     };
   });
 };

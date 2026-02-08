@@ -97,17 +97,17 @@ export default function MatchResult({
   return (
     <div
       className={cn(
-        "p-4 rounded-lg border transition-all duration-300 animate-slide-up",
+        "p-2 sm:p-4 rounded-lg border transition-all duration-300 animate-slide-up",
         match.played ? "bg-white shadow-sm" : "bg-secondary/50",
         !isPlayed ? "border-primary/20 shadow-sm" : "border-transparent",
       )}
     >
       <div className="flex items-center justify-between">
-        <div className="grid grid-cols-[1fr_80px_1fr] w-full gap-10 items-center">
+        <div className="grid grid-cols-[1fr_auto_1fr] w-full gap-1 sm:gap-4 md:gap-10 items-center">
           {/* Home Team */}
           <div className="text-right flex justify-end items-center">
             <span
-              className="px-3 py-1 rounded-full text-sm font-bold cursor-pointer transition-all hover:scale-105 shadow-sm inline-block"
+              className="px-2 py-0.5 sm:px-3 sm:py-1 rounded-full text-xs sm:text-sm font-bold cursor-pointer transition-all hover:scale-105 shadow-sm inline-block whitespace-nowrap"
               style={{
                 backgroundColor: homeTeam.color,
                 color: homeTeam.textColor,
@@ -131,7 +131,7 @@ export default function MatchResult({
                   max={9}
                   value={homeGoals === null ? "" : homeGoals}
                   onChange={(e) => handleScoreChange("home", e.target.value)}
-                  className="w-12 text-center p-1 h-8 bg-white border-primary/20"
+                  className="w-10 sm:w-12 text-center p-1 h-8 bg-white border-primary/20"
                 />
                 <span
                   className="text-muted-foreground font-bold"
@@ -148,7 +148,7 @@ export default function MatchResult({
                   max={9}
                   value={awayGoals === null ? "" : awayGoals}
                   onChange={(e) => handleScoreChange("away", e.target.value)}
-                  className="w-12 text-center p-1 h-8 bg-white border-primary/20"
+                  className="w-10 sm:w-12 text-center p-1 h-8 bg-white border-primary/20"
                 />
               </div>
             ) : (
@@ -171,7 +171,7 @@ export default function MatchResult({
           {/* Away Team */}
           <div className="text-left flex items-center">
             <span
-              className="px-3 py-1 rounded-full text-sm font-bold cursor-pointer transition-all hover:scale-105 shadow-sm inline-block"
+              className="px-2 py-0.5 sm:px-3 sm:py-1 rounded-full text-xs sm:text-sm font-bold cursor-pointer transition-all hover:scale-105 shadow-sm inline-block whitespace-nowrap"
               style={{
                 backgroundColor: awayTeam.color,
                 color: awayTeam.textColor,

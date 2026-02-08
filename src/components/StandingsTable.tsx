@@ -111,15 +111,6 @@ export default function StandingsTable({
                   <TableCell className="p-1 text-center text-sm font-bold sm:p-2">
                     {stats.points}
                   </TableCell>
-                  {useWeighted && (
-                    <TableCell className="p-1 text-center text-xs sm:p-2 sm:text-sm">
-                      <span className="font-medium text-muted-foreground">
-                        {stats.strength
-                          ? `${(stats.strength * 100).toFixed(0)}%`
-                          : "-"}
-                      </span>
-                    </TableCell>
-                  )}
                   <TableCell className="p-1 sm:p-2">
                     <div className="relative w-full h-3 bg-secondary rounded-full overflow-hidden sm:h-4">
                       <div

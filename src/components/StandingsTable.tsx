@@ -65,7 +65,18 @@ export default function StandingsTable({
                   >
                     {stats.position}
                   </TableCell>
-                  <TableCell className="font-medium">{team?.name}</TableCell>
+                  <TableCell className="font-medium">
+                    <span
+                      className="px-2 py-0.5 rounded-full text-xs font-bold shadow-sm inline-block"
+                      style={{
+                        backgroundColor: team?.color,
+                        color: team?.textColor,
+                        border: `1px solid ${team?.color}cc`,
+                      }}
+                    >
+                      {team?.name}
+                    </span>
+                  </TableCell>
                   <TableCell className="text-center">{stats.played}</TableCell>
                   <TableCell
                     className={cn(

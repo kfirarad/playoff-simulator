@@ -103,11 +103,16 @@ export default function MatchResult({
       )}
     >
       <div className="flex items-center justify-between">
-        <div className="grid grid-cols-[1fr_80px_1fr] w-full gap-2 items-center">
+        <div className="grid grid-cols-[1fr_80px_1fr] w-full gap-10 items-center">
           {/* Home Team */}
-          <div className="text-right flex justify-end items-center gap-2">
+          <div className="text-right flex justify-end items-center">
             <span
-              className="font-medium"
+              className="px-3 py-1 rounded-full text-sm font-bold cursor-pointer transition-all hover:scale-105 shadow-sm inline-block"
+              style={{
+                backgroundColor: homeTeam.color,
+                color: homeTeam.textColor,
+                border: `1px solid ${homeTeam.color}cc`,
+              }}
               onClick={() => {
                 setAwayGoals(awayGoals === null ? 0 : awayGoals);
                 setHomeGoals(homeGoals === null ? awayGoals + 1 : homeGoals);
@@ -115,7 +120,6 @@ export default function MatchResult({
             >
               {homeTeam.name}
             </span>
-            <span className="bg-secondary text-xs rounded-md px-1.5 py-0.5"></span>
           </div>
 
           <div className="flex justify-center items-center">
@@ -127,10 +131,10 @@ export default function MatchResult({
                   max={9}
                   value={homeGoals === null ? "" : homeGoals}
                   onChange={(e) => handleScoreChange("home", e.target.value)}
-                  className="w-12 text-center p-1 h-8"
+                  className="w-12 text-center p-1 h-8 bg-white border-primary/20"
                 />
                 <span
-                  className="text-muted-foreground"
+                  className="text-muted-foreground font-bold"
                   onClick={() => {
                     setHomeGoals(1);
                     setAwayGoals(1);
@@ -144,29 +148,35 @@ export default function MatchResult({
                   max={9}
                   value={awayGoals === null ? "" : awayGoals}
                   onChange={(e) => handleScoreChange("away", e.target.value)}
-                  className="w-12 text-center p-1 h-8"
+                  className="w-12 text-center p-1 h-8 bg-white border-primary/20"
                 />
               </div>
             ) : (
               <div
-                className="text-xl font-semibold flex items-center gap-2"
+                className="text-xl font-bold flex items-center gap-2"
                 onClick={() => {
                   setHomeGoals(homeGoals === null ? 0 : homeGoals);
                   setAwayGoals(awayGoals === null ? homeGoals : awayGoals);
                 }}
               >
                 <span>{match.homeGoals ?? "-"}</span>
-                <span className="text-muted-foreground text-sm">:</span>
+                <span className="text-muted-foreground text-sm opacity-50">
+                  :
+                </span>
                 <span>{match.awayGoals ?? "-"}</span>
               </div>
             )}
           </div>
 
           {/* Away Team */}
-          <div className="text-left flex items-center gap-2">
-            <span className="bg-secondary text-xs rounded-md px-1.5 py-0.5"></span>
+          <div className="text-left flex items-center">
             <span
-              className="font-medium"
+              className="px-3 py-1 rounded-full text-sm font-bold cursor-pointer transition-all hover:scale-105 shadow-sm inline-block"
+              style={{
+                backgroundColor: awayTeam.color,
+                color: awayTeam.textColor,
+                border: `1px solid ${awayTeam.color}cc`,
+              }}
               onClick={() => {
                 setHomeGoals(homeGoals === null ? 0 : homeGoals);
                 setAwayGoals(awayGoals === null ? homeGoals + 1 : awayGoals);

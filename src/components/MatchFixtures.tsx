@@ -119,6 +119,15 @@ export default function MatchFixtures({
                 <div className="space-y-4" style={{ direction: "rtl" }}>
                   {matches
                     .filter((match) => match.gameWeek === week)
+                    .sort((a, b) => {
+                      const isAHPT =
+                        a.homeTeamId === "HPT" || a.awayTeamId === "HPT";
+                      const isBHPT =
+                        b.homeTeamId === "HPT" || b.awayTeamId === "HPT";
+                      if (isAHPT && !isBHPT) return -1;
+                      if (!isAHPT && isBHPT) return 1;
+                      return 0;
+                    })
                     .map((match) => {
                       const homeTeam = teams.find(
                         (t) => t.id === match.homeTeamId,

@@ -5,6 +5,8 @@ export interface Team {
   goalDifference: number;
   points: number;
   played: number;
+  color?: string;
+  textColor?: string;
 }
 
 export interface TeamStats {

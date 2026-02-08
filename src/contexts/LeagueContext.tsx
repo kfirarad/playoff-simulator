@@ -3,6 +3,7 @@ import {
   initialData,
   calculateTeamStats,
   calculateProbabilities,
+  dataHash,
 } from "@/lib/data";
 import { LeagueData, Match, MatchOutcome, Team, TeamStats } from "@/lib/types";
 import { toast } from "@/components/ui/use-toast";
@@ -25,13 +26,32 @@ const LeagueContext = createContext<LeagueContextType | undefined>(undefined);
 export function LeagueProvider({ children }: { children: React.ReactNode }) {
   const [leagueData, setLeagueData] = useState<LeagueData>(() => {
     const saved = localStorage.getItem("leagueData");
-    return saved ? JSON.parse(saved) : initialData;
+    const savedHash = localStorage.getItem("dataHash");
+
+    if (saved && savedHash === dataHash) {
+      return JSON.parse(saved);
+    }
+    return initialData;
   });
   const [teamStats, setTeamStats] = useState<TeamStats[]>([]);
   const [simulations, setSimulations] = useState<number>(10000);
 
   useEffect(() => {
+    const savedHash = localStorage.getItem("dataHash");
+    if (savedHash !== dataHash) {
+      localStorage.setItem("dataHash", dataHash);
+      if (savedHash) {
+        toast({
+          title: "התוצאות עודכנו",
+          description: "הנתונים אותחלו כדי להסתנכרן עם התוצאות האחרונות",
+        });
+      }
+    }
+  }, []);
+
+  useEffect(() => {
     localStorage.setItem("leagueData", JSON.stringify(leagueData));
+    localStorage.setItem("dataHash", dataHash);
 
     // Calculate initial standings with probabilities
     const stats = calculateProbabilities(
@@ -82,8 +102,19 @@ export function LeagueProvider({ children }: { children: React.ReactNode }) {
 
   const randomizeLeague = () => {
     setLeagueData((prevData) => {
+      const unplayedMatches = prevData.matches.filter((m) => !m.played);
+      const allUnplayedFilled = unplayedMatches.every(
+        (match) => match.homeGoals !== null && match.awayGoals !== null,
+      );
+
       const updatedMatches = prevData.matches.map((match) => {
-        if (match.homeGoals === null || match.awayGoals === null) {
+        if (match.played) return match;
+
+        if (
+          allUnplayedFilled ||
+          match.homeGoals === null ||
+          match.awayGoals === null
+        ) {
           return {
             ...match,
             homeGoals: Math.floor(Math.random() * 4), // Random 0-3

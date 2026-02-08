@@ -68,6 +68,11 @@ export const initialData: LeagueData = {
   currentGameWeek: 22,
 };
 
+export const dataHash = initialData.matches
+  .filter((m) => m.played)
+  .map((m) => `${m.id}:${m.homeGoals}-${m.awayGoals}`)
+  .join("|");
+
 
 function rotateArray<T>(arr: T[], positions: number): T[] {
   const pos = positions % arr.length;

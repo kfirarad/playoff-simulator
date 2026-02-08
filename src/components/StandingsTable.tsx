@@ -51,11 +51,6 @@ export default function StandingsTable({
               <TableHead className="w-8 h-10 px-1 text-center text-sm font-bold sm:px-2">
                 נק׳
               </TableHead>
-              {useWeighted && (
-                <TableHead className="w-12 h-10 px-1 text-center text-sm font-bold sm:px-2">
-                  חוזק
-                </TableHead>
-              )}
               <TableHead className="w-20 h-10 px-1 text-center text-sm font-bold sm:px-2 sm:w-24">
                 סיכוי
               </TableHead>

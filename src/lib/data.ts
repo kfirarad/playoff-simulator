@@ -30,11 +30,11 @@ export const initialData: LeagueData = {
     { id: "m22-7", homeTeamId: "HBS", awayTeamId: "BJ", homeGoals: 2, awayGoals: 1, played: true, gameWeek: 22 },
 
     // Round 23
-    { id: "m23-1", homeTeamId: "HTA", awayTeamId: "HJ", homeGoals: null, awayGoals: null, played: false, gameWeek: 23 },
-    { id: "m23-2", homeTeamId: "HPT", awayTeamId: "HH", homeGoals: null, awayGoals: null, played: false, gameWeek: 23 },
-    { id: "m23-3", homeTeamId: "HKS", awayTeamId: "ET", homeGoals: null, awayGoals: null, played: false, gameWeek: 23 },
-    { id: "m23-4", homeTeamId: "MBR", awayTeamId: "MN", homeGoals: null, awayGoals: null, played: false, gameWeek: 23 },
-    { id: "m23-5", homeTeamId: "MSA", awayTeamId: "HBS", homeGoals: null, awayGoals: null, played: false, gameWeek: 23 },
+    { id: "m23-1", homeTeamId: "HTA", awayTeamId: "HJ", homeGoals: 3, awayGoals: 1, played: true, gameWeek: 23 },
+    { id: "m23-2", homeTeamId: "HPT", awayTeamId: "HH", homeGoals: 0, awayGoals: 1, played: true, gameWeek: 23 },
+    { id: "m23-3", homeTeamId: "HKS", awayTeamId: "ET", homeGoals: 2, awayGoals: 2, played: true, gameWeek: 23 },
+    { id: "m23-4", homeTeamId: "MBR", awayTeamId: "MN", homeGoals: 0, awayGoals: 4, played: true, gameWeek: 23 },
+    { id: "m23-5", homeTeamId: "MSA", awayTeamId: "HBS", homeGoals: 1, awayGoals: 2, played: false, gameWeek: 23 },
     { id: "m23-6", homeTeamId: "MH", awayTeamId: "BS", homeGoals: null, awayGoals: null, played: false, gameWeek: 23 },
     { id: "m23-7", homeTeamId: "BJ", awayTeamId: "MTA", homeGoals: null, awayGoals: null, played: false, gameWeek: 23 },
 

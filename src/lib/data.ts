@@ -36,7 +36,7 @@ export const initialData: LeagueData = {
     { id: "m23-4", homeTeamId: "MBR", awayTeamId: "MN", homeGoals: 0, awayGoals: 4, played: true, gameWeek: 23 },
     { id: "m23-5", homeTeamId: "MSA", awayTeamId: "HBS", homeGoals: 1, awayGoals: 2, played: true, gameWeek: 23 },
     { id: "m23-6", homeTeamId: "MH", awayTeamId: "BS", homeGoals: 4, awayGoals: 0, played: true, gameWeek: 23 },
-    { id: "m23-7", homeTeamId: "BJ", awayTeamId: "MTA", homeGoals: null, awayGoals: null, played: false, gameWeek: 23 },
+    { id: "m23-7", homeTeamId: "BJ", awayTeamId: "MTA", homeGoals: 0, awayGoals: 0, played: true, gameWeek: 23 },
 
     // Round 24
     { id: "m24-1", homeTeamId: "MTA", awayTeamId: "MSA", homeGoals: null, awayGoals: null, played: false, gameWeek: 24 },

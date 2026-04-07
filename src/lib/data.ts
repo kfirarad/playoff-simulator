@@ -11,7 +11,7 @@ export const initialData: LeagueData = {
     { id: "HPT", name: "הפועל פתח תקוה", points: 29, goalDifference: 4, played: 21, color: "#0055a5", textColor: "#ffffff" },
     { id: "BS", name: "בני סכנין", points: 28, goalDifference: -3, played: 21, color: "#ed1c24", textColor: "#ffffff" },
     { id: "MN", name: "מכבי נתניה", points: 27, goalDifference: -9, played: 21, color: "#fff200", textColor: "#000000" },
-    { id: "ET", name: "עירוני טבריה", points: 22, goalDifference: -18, played: 21, color: "#0072bc", textColor: "#ffffff" },
+    { id: "ET", name: "עירוני טבריה", points: 22 - 8, goalDifference: -18, played: 21, color: "#0072bc", textColor: "#ffffff" },
     { id: "HH", name: "הפועל חיפה", points: 20, goalDifference: -9, played: 21, color: "#ed1c24", textColor: "#ffffff" },
     { id: "MSA", name: "מ.ס. אשדוד", points: 20, goalDifference: -17, played: 21, color: "#ffce00", textColor: "#ed1c24" },
     { id: "HKS", name: "הפועל קרית שמונה", points: 19, goalDifference: -9, played: 21, color: "#00a9e0", textColor: "#ffffff" },
@@ -48,13 +48,13 @@ export const initialData: LeagueData = {
     { id: "m24-7", homeTeamId: "MN", awayTeamId: "BJ", homeGoals: 2, awayGoals: 8, played: true, gameWeek: 24 },
 
     // Round 25
-    { id: "m25-1", homeTeamId: "MBR", awayTeamId: "HJ", homeGoals: null, awayGoals: null, played: false, gameWeek: 25 },
-    { id: "m25-2", homeTeamId: "HKS", awayTeamId: "BS", homeGoals: null, awayGoals: null, played: false, gameWeek: 25 },
-    { id: "m25-3", homeTeamId: "BJ", awayTeamId: "ET", homeGoals: null, awayGoals: null, played: false, gameWeek: 25 },
-    { id: "m25-4", homeTeamId: "HH", awayTeamId: "MTA", homeGoals: null, awayGoals: null, played: false, gameWeek: 25 },
-    { id: "m25-5", homeTeamId: "HBS", awayTeamId: "HPT", homeGoals: null, awayGoals: null, played: false, gameWeek: 25 },
-    { id: "m25-6", homeTeamId: "MSA", awayTeamId: "MN", homeGoals: null, awayGoals: null, played: false, gameWeek: 25 },
-    { id: "m25-7", homeTeamId: "HTA", awayTeamId: "MH", homeGoals: null, awayGoals: null, played: false, gameWeek: 25 },
+    { id: "m25-1", homeTeamId: "MBR", awayTeamId: "HJ", homeGoals: 0, awayGoals: 0, played: true, gameWeek: 25 },
+    { id: "m25-2", homeTeamId: "HKS", awayTeamId: "BS", homeGoals: 2, awayGoals: 0, played: true, gameWeek: 25 },
+    { id: "m25-3", homeTeamId: "BJ", awayTeamId: "ET", homeGoals: 3, awayGoals: 2, played: true, gameWeek: 25 },
+    { id: "m25-4", homeTeamId: "HH", awayTeamId: "MTA", homeGoals: 1, awayGoals: 3, played: true, gameWeek: 25 },
+    { id: "m25-5", homeTeamId: "HBS", awayTeamId: "HPT", homeGoals: 1, awayGoals: 1, played: true, gameWeek: 25 },
+    { id: "m25-6", homeTeamId: "MSA", awayTeamId: "MN", homeGoals: 2, awayGoals: 3, played: true, gameWeek: 25 },
+    { id: "m25-7", homeTeamId: "HTA", awayTeamId: "MH", homeGoals: 2, awayGoals: 0, played: true, gameWeek: 25 },
 
     // Round 26
     { id: "m26-1", homeTeamId: "ET", awayTeamId: "MSA", homeGoals: null, awayGoals: null, played: false, gameWeek: 26 },

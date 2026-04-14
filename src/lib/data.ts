@@ -3,69 +3,58 @@ import { debounce } from "lodash";
 
 export const initialData: LeagueData = {
   teams: [
-    { id: "HBS", name: "הפועל באר שבע", points: 48, goalDifference: 29, played: 21, color: "#e31e24", textColor: "#ffffff" },
-    { id: "BJ", name: "ביתר ירושלים", points: 47, goalDifference: 24, played: 21, color: "#fff200", textColor: "#000000" },
-    { id: "HTA", name: "הפועל תל אביב", points: 38, goalDifference: 14, played: 21, color: "#ed1c24", textColor: "#ffffff" },
-    { id: "MTA", name: "מכבי תל אביב", points: 39, goalDifference: 17, played: 21, color: "#0054a6", textColor: "#fde047" },
-    { id: "MH", name: "מכבי חיפה", points: 35, goalDifference: 18, played: 21, color: "#009640", textColor: "#ffffff" },
-    { id: "HPT", name: "הפועל פתח תקוה", points: 29, goalDifference: 4, played: 21, color: "#0055a5", textColor: "#ffffff" },
-    { id: "BS", name: "בני סכנין", points: 28, goalDifference: -3, played: 21, color: "#ed1c24", textColor: "#ffffff" },
-    { id: "MN", name: "מכבי נתניה", points: 27, goalDifference: -9, played: 21, color: "#fff200", textColor: "#000000" },
-    { id: "ET", name: "עירוני טבריה", points: 22 - 8, goalDifference: -18, played: 21, color: "#0072bc", textColor: "#ffffff" },
-    { id: "HH", name: "הפועל חיפה", points: 20, goalDifference: -9, played: 21, color: "#ed1c24", textColor: "#ffffff" },
-    { id: "MSA", name: "מ.ס. אשדוד", points: 20, goalDifference: -17, played: 21, color: "#ffce00", textColor: "#ed1c24" },
-    { id: "HKS", name: "הפועל קרית שמונה", points: 19, goalDifference: -9, played: 21, color: "#00a9e0", textColor: "#ffffff" },
-    { id: "HJ", name: "הפועל ירושלים", points: 19, goalDifference: -10, played: 21, color: "#ed1c24", textColor: "#000000" },
-    { id: "MBR", name: "מכבי בני ריינה", points: 11, goalDifference: -31, played: 21, color: "#0054a6", textColor: "#ffffff" },
+    { id: "HBS", name: "הפועל באר שבע", points: 59, goalDifference: 33, played: 26, color: "#e31e24", textColor: "#ffffff" },
+    { id: "BJR", name: "ביתר ירושלים", points: 57, goalDifference: 32, played: 26, color: "#fff200", textColor: "#000000" },
+    { id: "HTA", name: "הפועל תל אביב", points: 49, goalDifference: 23, played: 26, color: "#ed1c24", textColor: "#ffffff" },
+    { id: "MTA", name: "מכבי תל אביב", points: 49, goalDifference: 20, played: 26, color: "#0054a6", textColor: "#fde047" },
+    { id: "MHF", name: "מכבי חיפה", points: 42, goalDifference: 22, played: 26, color: "#009640", textColor: "#ffffff" },
+    { id: "HPT", name: "הפועל פתח תקוה", points: 37, goalDifference: 5, played: 26, color: "#0055a5", textColor: "#ffffff" },
   ],
 
   matches: [
-    // Round 22
-    { id: "m22-1", homeTeamId: "ET", awayTeamId: "HTA", homeGoals: 0, awayGoals: 2, played: true, gameWeek: 22 },
-    { id: "m22-2", homeTeamId: "HJ", awayTeamId: "MH", homeGoals: 1, awayGoals: 1, played: true, gameWeek: 22 },
-    { id: "m22-3", homeTeamId: "HH", awayTeamId: "MSA", homeGoals: 0, awayGoals: 2, played: true, gameWeek: 22 },
-    { id: "m22-4", homeTeamId: "BS", awayTeamId: "HPT", homeGoals: 1, awayGoals: 2, played: true, gameWeek: 22 },
-    { id: "m22-5", homeTeamId: "MN", awayTeamId: "HKS", homeGoals: 1, awayGoals: 1, played: true, gameWeek: 22 },
-    { id: "m22-6", homeTeamId: "MTA", awayTeamId: "MBR", homeGoals: 4, awayGoals: 0, played: true, gameWeek: 22 },
-    { id: "m22-7", homeTeamId: "HBS", awayTeamId: "BJ", homeGoals: 2, awayGoals: 1, played: true, gameWeek: 22 },
-
-    // Round 23
-    { id: "m23-1", homeTeamId: "HTA", awayTeamId: "HJ", homeGoals: 3, awayGoals: 1, played: true, gameWeek: 23 },
-    { id: "m23-2", homeTeamId: "HPT", awayTeamId: "HH", homeGoals: 0, awayGoals: 1, played: true, gameWeek: 23 },
-    { id: "m23-3", homeTeamId: "HKS", awayTeamId: "ET", homeGoals: 2, awayGoals: 2, played: true, gameWeek: 23 },
-    { id: "m23-4", homeTeamId: "MBR", awayTeamId: "MN", homeGoals: 0, awayGoals: 4, played: true, gameWeek: 23 },
-    { id: "m23-5", homeTeamId: "MSA", awayTeamId: "HBS", homeGoals: 1, awayGoals: 2, played: true, gameWeek: 23 },
-    { id: "m23-6", homeTeamId: "MH", awayTeamId: "BS", homeGoals: 4, awayGoals: 0, played: true, gameWeek: 23 },
-    { id: "m23-7", homeTeamId: "BJ", awayTeamId: "MTA", homeGoals: 0, awayGoals: 0, played: true, gameWeek: 23 },
-
-    // Round 24
-    { id: "m24-1", homeTeamId: "MTA", awayTeamId: "MSA", homeGoals: 3, awayGoals: 2, played: true, gameWeek: 24 },
-    { id: "m24-2", homeTeamId: "MH", awayTeamId: "HPT", homeGoals: 0, awayGoals: 1, played: true, gameWeek: 24 },
-    { id: "m24-3", homeTeamId: "HJ", awayTeamId: "HKS", homeGoals: 0, awayGoals: 1, played: true, gameWeek: 24 },
-    { id: "m24-4", homeTeamId: "BS", awayTeamId: "HTA", homeGoals: 0, awayGoals: 0, played: true, gameWeek: 24 },
-    { id: "m24-5", homeTeamId: "ET", awayTeamId: "MBR", homeGoals: 2, awayGoals: 1, played: true, gameWeek: 24 },
-    { id: "m24-6", homeTeamId: "HBS", awayTeamId: "HH", homeGoals: 1, awayGoals: 1, played: true, gameWeek: 24 },
-    { id: "m24-7", homeTeamId: "MN", awayTeamId: "BJ", homeGoals: 2, awayGoals: 8, played: true, gameWeek: 24 },
-
-    // Round 25
-    { id: "m25-1", homeTeamId: "MBR", awayTeamId: "HJ", homeGoals: 0, awayGoals: 0, played: true, gameWeek: 25 },
-    { id: "m25-2", homeTeamId: "HKS", awayTeamId: "BS", homeGoals: 2, awayGoals: 0, played: true, gameWeek: 25 },
-    { id: "m25-3", homeTeamId: "BJ", awayTeamId: "ET", homeGoals: 3, awayGoals: 2, played: true, gameWeek: 25 },
-    { id: "m25-4", homeTeamId: "HH", awayTeamId: "MTA", homeGoals: 1, awayGoals: 3, played: true, gameWeek: 25 },
-    { id: "m25-5", homeTeamId: "HBS", awayTeamId: "HPT", homeGoals: 1, awayGoals: 1, played: true, gameWeek: 25 },
-    { id: "m25-6", homeTeamId: "MSA", awayTeamId: "MN", homeGoals: 2, awayGoals: 3, played: true, gameWeek: 25 },
-    { id: "m25-7", homeTeamId: "HTA", awayTeamId: "MH", homeGoals: 2, awayGoals: 0, played: true, gameWeek: 25 },
-
-    // Round 26
-    { id: "m26-1", homeTeamId: "ET", awayTeamId: "MSA", homeGoals: null, awayGoals: null, played: false, gameWeek: 26 },
-    { id: "m26-2", homeTeamId: "MTA", awayTeamId: "HBS", homeGoals: null, awayGoals: null, played: false, gameWeek: 26 },
-    { id: "m26-3", homeTeamId: "BS", awayTeamId: "MBR", homeGoals: null, awayGoals: null, played: false, gameWeek: 26 },
-    { id: "m26-4", homeTeamId: "HPT", awayTeamId: "HTA", homeGoals: null, awayGoals: null, played: false, gameWeek: 26 },
-    { id: "m26-5", homeTeamId: "MH", awayTeamId: "HKS", homeGoals: null, awayGoals: null, played: false, gameWeek: 26 },
-    { id: "m26-6", homeTeamId: "MN", awayTeamId: "HH", homeGoals: null, awayGoals: null, played: false, gameWeek: 26 },
-    { id: "m26-7", homeTeamId: "HJ", awayTeamId: "BJ", homeGoals: null, awayGoals: null, played: false, gameWeek: 26 },
+    // Round 27
+    { id: "m27-1", homeTeamId: "HBS", awayTeamId: "HPT", homeGoals: null, awayGoals: null, played: false, gameWeek: 27 },
+    { id: "m27-2", homeTeamId: "BJR", awayTeamId: "MHF", homeGoals: null, awayGoals: null, played: false, gameWeek: 27 },
+    { id: "m27-3", homeTeamId: "MTA", awayTeamId: "HTA", homeGoals: null, awayGoals: null, played: false, gameWeek: 27 },
+    // Round 28
+    { id: "m28-1", homeTeamId: "HPT", awayTeamId: "HTA", homeGoals: null, awayGoals: null, played: false, gameWeek: 27 },
+    { id: "m28-2", homeTeamId: "MHF", awayTeamId: "MTA", homeGoals: null, awayGoals: null, played: false, gameWeek: 27 },
+    { id: "m28-3", homeTeamId: "HBS", awayTeamId: "BJR", homeGoals: null, awayGoals: null, played: false, gameWeek: 27 },
+    // Round 29
+    { id: "m29-1", homeTeamId: "MTA", awayTeamId: "HBS", homeGoals: null, awayGoals: null, played: false, gameWeek: 27 },
+    { id: "m29-2", homeTeamId: "BJR", awayTeamId: "HPT", homeGoals: null, awayGoals: null, played: false, gameWeek: 27 },
+    { id: "m29-3", homeTeamId: "HTA", awayTeamId: "MHF", homeGoals: null, awayGoals: null, played: false, gameWeek: 27 },
+    // Round 30
+    { id: "m30-1", homeTeamId: "HPT", awayTeamId: "MHF", homeGoals: null, awayGoals: null, played: false, gameWeek: 27 },
+    { id: "m30-2", homeTeamId: "HBS", awayTeamId: "HTA", homeGoals: null, awayGoals: null, played: false, gameWeek: 27 },
+    { id: "m30-3", homeTeamId: "BJR", awayTeamId: "MTA", homeGoals: null, awayGoals: null, played: false, gameWeek: 27 },
+    // Round 31
+    { id: "m31-1", homeTeamId: "MTA", awayTeamId: "HPT", homeGoals: null, awayGoals: null, played: false, gameWeek: 27 },
+    { id: "m31-2", homeTeamId: "HTA", awayTeamId: "BJR", homeGoals: null, awayGoals: null, played: false, gameWeek: 27 },
+    { id: "m31-3", homeTeamId: "MHF", awayTeamId: "HBS", homeGoals: null, awayGoals: null, played: false, gameWeek: 27 },
+    // Round 32
+    { id: "m32-1", homeTeamId: "HPT", awayTeamId: "HBS", homeGoals: null, awayGoals: null, played: false, gameWeek: 27 },
+    { id: "m32-2", homeTeamId: "MHF", awayTeamId: "BJR", homeGoals: null, awayGoals: null, played: false, gameWeek: 27 },
+    { id: "m32-3", homeTeamId: "HTA", awayTeamId: "MTA", homeGoals: null, awayGoals: null, played: false, gameWeek: 27 },
+        // Round 33
+    { id: "m33-1", homeTeamId: "HTA", awayTeamId: "HPT", homeGoals: null, awayGoals: null, played: false, gameWeek: 27 },
+    { id: "m33-2", homeTeamId: "BJR", awayTeamId: "HBS", homeGoals: null, awayGoals: null, played: false, gameWeek: 27 },
+    { id: "m33-3", homeTeamId: "MTA", awayTeamId: "MHF", homeGoals: null, awayGoals: null, played: false, gameWeek: 27 },
+        // Round 34
+    { id: "m34-1", homeTeamId: "MHF", awayTeamId: "HPT", homeGoals: null, awayGoals: null, played: false, gameWeek: 27 },
+    { id: "m34-2", homeTeamId: "HTA", awayTeamId: "HBS", homeGoals: null, awayGoals: null, played: false, gameWeek: 27 },
+    { id: "m34-3", homeTeamId: "MTA", awayTeamId: "BJR", homeGoals: null, awayGoals: null, played: false, gameWeek: 27 },
+        // Round 35
+    { id: "m35-1", homeTeamId: "HPT", awayTeamId: "BJR", homeGoals: null, awayGoals: null, played: false, gameWeek: 27 },
+    { id: "m35-2", homeTeamId: "HBS", awayTeamId: "MTA", homeGoals: null, awayGoals: null, played: false, gameWeek: 27 },
+    { id: "m35-3", homeTeamId: "MHF", awayTeamId: "HTA", homeGoals: null, awayGoals: null, played: false, gameWeek: 27 },
+        // Round 36
+    { id: "m36-1", homeTeamId: "HPT", awayTeamId: "MTA", homeGoals: null, awayGoals: null, played: false, gameWeek: 27 },
+    { id: "m36-2", homeTeamId: "BJR", awayTeamId: "HTA", homeGoals: null, awayGoals: null, played: false, gameWeek: 27 },
+    { id: "m36-3", homeTeamId: "HBS", awayTeamId: "MHF", homeGoals: null, awayGoals: null, played: false, gameWeek: 27 },
+    
   ],
-  currentGameWeek: 22,
+  currentGameWeek: 27,
 };
 
 export const dataHash = initialData.matches

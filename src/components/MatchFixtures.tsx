@@ -7,7 +7,6 @@ import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { CalendarDays } from "lucide-react";
 import MatchResult from "./MatchResult";
-import { group } from "console";
 
 interface MatchFixturesProps {
   teams: Team[];
@@ -25,7 +24,7 @@ export default function MatchFixtures({
     currentGameWeek.toString(),
   );
 
-  const gameWeeks = Array.from(new Set(matches.map(a=>a.gameWeek)))
+  const gameWeeks = Array.from(new Set(matches.map((a) => a.gameWeek)));
 
   // Filter matches by game week
   const matchesForSelectedWeek = matches.filter(

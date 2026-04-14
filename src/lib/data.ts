@@ -1,6 +1,8 @@
 import { LeagueData, Match, Team, TeamStats } from "./types";
 import { debounce } from "lodash";
 
+const TARGET_POS = 1;
+
 export const initialData: LeagueData = {
   teams: [
     { id: "HBS", name: "הפועל באר שבע", points: 59, goalDifference: 33, played: 26, color: "#e31e24", textColor: "#ffffff" },
@@ -218,7 +220,7 @@ export const calculateProbabilities = function calculateProbabilities(
     // Calculate final standings for this simulation
     const simulatedStats = calculateTeamStats(teams, simulatedMatches);
 
-    simulatedStats.slice(0, 6).forEach((stats) => {
+    simulatedStats.slice(0, TARGET_POS).forEach((stats) => {
       topPositionCounts[stats.teamId]++;
     });
   }

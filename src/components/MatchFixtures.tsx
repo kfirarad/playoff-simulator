@@ -25,7 +25,7 @@ export default function MatchFixtures({
     currentGameWeek.toString(),
   );
 
-  const gameWeeks = [22, 23, 24, 25, 26];
+  const gameWeeks = Array.from(new Set(matches.map(a=>a.gameWeek)))
 
   // Filter matches by game week
   const matchesForSelectedWeek = matches.filter(
